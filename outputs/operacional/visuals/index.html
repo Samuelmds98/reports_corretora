@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Operacional / Qualidade — Raio X Cooperados</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #FAFAFA; color: #1A1A1A; }
+    .header { background: #EF7925; color: white; padding: 36px 40px; }
+    .header h1 { font-size: 24px; font-weight: 600; }
+    .header p { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .card { display: block; background: white; border-radius: 10px; padding: 20px 22px;
+             box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-decoration: none; color: inherit;
+             border-left: 4px solid #EF7925; transition: transform .08s, box-shadow .08s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+    .card .num { font-size: 12px; color: #EF7925; font-weight: 700; letter-spacing: .5px; }
+    .card h3 { font-size: 16px; font-weight: 600; margin: 6px 0; }
+    .card p { font-size: 13px; color: #666; line-height: 1.5; }
+    .card .go { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: #EF7925; }
+    .footer { text-align: center; font-size: 12px; color: #AAA; padding: 28px 0 40px; }
+  </style>
+</head>
+<body>
+  <div class="header"><h1>Painel Operacional / Qualidade — Raio X Cooperados</h1><p>Cadastro · Processo · Qualidade de dados</p></div>
+  <div class="container"><div class="grid"><a class="card" href="10_completude_cadastro.html"><span class="num">10</span><h3>Completude do Cadastro</h3><p>Diagnóstico de preenchimento por campo (base da análise qualitativa)</p><span class="go">Abrir →</span></a><a class="card" href="13_origem_cadastro.html"><span class="num">13</span><h3>Origem do Cadastro — Migrado × Orgânico</h3><p>Quanto da base é carga histórica (e por que isso enviesa as séries)</p><span class="go">Abrir →</span></a><a class="card" href="14_status_vs_situacao.html"><span class="num">14</span><h3>Status do Motor × Situação Nativa</h3><p>Concordância entre o status calculado e a SITUAÇÃO do documento</p><span class="go">Abrir →</span></a><a class="card" href="15_acionabilidade_produtor.html"><span class="num">15</span><h3>Acionabilidade por Produtor</h3><p>% de clientes com telefone/e-mail por produtor (qualidade de cadastro)</p><span class="go">Abrir →</span></a><a class="card" href="16_qualidade_dados_dq.html"><span class="num">16</span><h3>Qualidade de Dados — Testes (DQ)</h3><p>Prêmio zerado, comissão > prêmio, inconsistência %, outliers, duplicatas</p><span class="go">Abrir →</span></a></div></div>
+  <div class="footer">Gerado em 20/06/2026 16:11 — Raio X Cooperados</div>
+</body>
+</html>

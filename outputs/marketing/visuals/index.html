@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Marketing — Raio X Cooperados</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #FAFAFA; color: #1A1A1A; }
+    .header { background: #08484C; color: white; padding: 36px 40px; }
+    .header h1 { font-size: 24px; font-weight: 600; }
+    .header p { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .card { display: block; background: white; border-radius: 10px; padding: 20px 22px;
+             box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-decoration: none; color: inherit;
+             border-left: 4px solid #08484C; transition: transform .08s, box-shadow .08s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+    .card .num { font-size: 12px; color: #08484C; font-weight: 700; letter-spacing: .5px; }
+    .card h3 { font-size: 16px; font-weight: 600; margin: 6px 0; }
+    .card p { font-size: 13px; color: #666; line-height: 1.5; }
+    .card .go { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: #08484C; }
+    .footer { text-align: center; font-size: 12px; color: #AAA; padding: 28px 0 40px; }
+  </style>
+</head>
+<body>
+  <div class="header"><h1>Painel Marketing — Raio X Cooperados</h1><p>Base · Prospects · Demografia</p></div>
+  <div class="container"><div class="grid"><a class="card" href="01_status_base.html"><span class="num">01</span><h3>Status Comercial da Base</h3><p>Composição da base de cadastro: ATIVO × INATIVO × PROSPECT</p><span class="go">Abrir →</span></a><a class="card" href="02_especialidade.html"><span class="num">02</span><h3>Distribuição por Especialidade</h3><p>Cooperados por CARACTERÍSTICA, comparando clientes × prospects</p><span class="go">Abrir →</span></a><a class="card" href="03_decada_nascimento.html"><span class="num">03</span><h3>Concentração por Década de Nascimento</h3><p>Coortes geracionais da base (clientes × prospects)</p><span class="go">Abrir →</span></a><a class="card" href="04_faixa_etaria.html"><span class="num">04</span><h3>Distribuição por Faixa Etária</h3><p>Até 40 · 41 a 59 · 60+ (clientes × prospects)</p><span class="go">Abrir →</span></a><a class="card" href="05_histograma_idade.html"><span class="num">05</span><h3>Histograma de Idade</h3><p>Distribuição etária da base, sobreposto clientes × prospects</p><span class="go">Abrir →</span></a></div></div>
+  <div class="footer">Gerado em 20/06/2026 16:11 — Raio X Cooperados</div>
+</body>
+</html>

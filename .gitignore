@@ -1,0 +1,61 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# Dados sensíveis - nunca versionar
+data/raw/*.xlsx
+data/raw/*.xls
+data/raw/*.csv
+data/processed/*.xlsx
+data/processed/*.xls
+data/processed/*.csv
+data/*.xlsx
+data/*.xls
+data/*.csv
+
+#TCC
+
+# Outputs gerados — por padrão NÃO versionar (contêm dados REAIS quando rodado com data/raw).
+# EXCEÇÃO: resultados FICTÍCIOS (gerados de data/exemplo) — só HTML e XLSX — p/ apresentação.
+# Parquet, .duckdb, .last_input_hash, logs e figuras de notebook ficam de fora.
+outputs/**
+!outputs/**/
+!outputs/*.html
+!outputs/**/*.html
+!outputs/**/*.xlsx
+
+# Variáveis de ambiente
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Contexto
+.claude/
+CLAUDE.MD
+
+# Notebooks de EDA (obsoletos — substituídos por Main.py)
+notebooks/
+
+# Apresentações (binários — fora do versionamento)
+*.pptx
+
+# Docs INTERNAS / de desenvolvimento (consumo próprio — não versionar)
+docs/interno/

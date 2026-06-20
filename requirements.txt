@@ -1,0 +1,29 @@
+# Core EDA
+pandas>=2.2.0
+numpy>=1.26.0
+openpyxl>=3.1.2       # leitura de Excel (.xlsx)
+xlrd>=2.0.1           # leitura de Excel legados (.xls)
+python-calamine>=0.2.0 # leitura rápida de Excel (engine Rust)
+pyarrow>=14.0.0      # persistência em Parquet (Power BI)
+
+# Camada de consulta / warehouse (MVP de plataforma — ver docs/EVOLUCAO_PLATAFORMA.md)
+duckdb>=1.0.0        # banco analítico embutido; SQL sobre os Parquet (camada única)
+
+# Visualização
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.20.0
+
+# Notebooks
+jupyter>=1.0.0
+nbformat>=5.9.0
+ipywidgets>=8.1.0     # widgets interativos nos notebooks
+
+# Utilitários
+python-dotenv>=1.0.0  # variáveis de ambiente
+rich>=13.7.0          # output formatado no terminal
+tqdm>=4.66.0          # barras de progresso
+
+# Qualidade / Reprodutibilidade
+black>=24.0.0         # formatação de código
+isort>=5.13.0         # ordenação de imports
