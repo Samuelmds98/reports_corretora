@@ -5,6 +5,32 @@ Ordenado do mais recente para o mais antigo.
 
 ---
 
+## [Marketing — campanhas acionáveis, audiência, personas e roadmap (TODO 1–4)] — Implementado ✓
+
+Expansão do track Marketing com os 4 itens do `TODO.md`, todos não-monetários:
+
+- **Alvos de aquisição (item 1):** `build_acquisition_targets` cruza nº de **prospects**
+  por especialidade (base de marketing) com os produtos que os **clientes** daquela
+  especialidade mais têm (penetração de `analytics.build_specialty_mix`). Saída =
+  especialidade → prospects → produto(s) a ofertar.
+- **Audiência de campanha (item 2):** `build_reachable_audience` mede, entre os prospects,
+  quantos são realmente alcançáveis por e-mail (e-mail **E** consentimento = `EMAIL_ACIONAVEL`,
+  reusando `operacional.build_contact_lookup`), total/% e por especialidade. As flags de
+  contato passam a ser anexadas em `build_marketing_base(df_cruzamento, contact_lookup)`.
+- **Personas (item 3):** `build_sex_distribution`, `build_marital_distribution`,
+  `build_client_type_distribution` (SEXO, ESTADO CIVIL ~41% preenchido → "Não Informado",
+  TIPO E/P/S) — todas com quebra cliente × prospect.
+- **Growth — Dados a Coletar (item 4):** `_render_growth_roadmap` gera um HTML estático
+  (cards) documentando métricas futuras e dados a capturar (origem do lead, engajamento de
+  campanha, motivos de não-conversão, renda real, share of wallet, NPS). Sem builder de dados.
+
+**Saídas:** `Marketing_RaioX.xlsx` passa a 10 abas; 11 HTMLs (06–10 novos + 11 roadmap);
+parquet ganha `alvos_aquisicao`, `audiencia_campanha`, `personas_*`; auditoria ganha 5
+workbooks (alvos/audiência contam só prospects via `audit_marketing(..., agg_col=
+"QTD_PROSPECTS", base_filter=...)`).
+
+---
+
 ## [3º track: MARKETING (base/mercado: cliente × prospect + demografia)] — Implementado ✓
 
 **Motivação (dado real):** o Comercial é construído sobre o grão de PRODUÇÃO, então os

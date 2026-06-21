@@ -718,24 +718,37 @@ def audit_completude(out_dir, df_completeness, df_cad_raw):
     )
 
 
-def audit_marketing(out_dir, fname, agg_df, base_df, group_keys):
+def audit_marketing(
+    out_dir,
+    fname,
+    agg_df,
+    base_df,
+    group_keys,
+    agg_col="QTD_COOPERADOS",
+    base_filter=None,
+):
     """
     Auditoria genérica das visões de MARKETING: lastro = base por cooperado
-    (`build_marketing_base`), com a âncora do cadastro. Reconcilia a contagem de
-    cooperados por chave (status, especialidade, década, faixa etária).
+    (`build_marketing_base`), com a âncora do cadastro. Reconcilia a contagem por
+    chave (status, especialidade, década, faixa etária, personas).
+
+    `agg_col`/`base_filter` permitem auditar recortes que contam apenas um subconjunto
+    da base — ex.: alvos de aquisição e audiência de campanha contam só PROSPECTS
+    (`agg_col="QTD_PROSPECTS"`, `base_filter=lambda b: b["EH_PROSPECT"]`).
     """
     if agg_df is None or agg_df.empty or base_df is None or base_df.empty:
         return SKIPPED
+    lastro = base_df[base_filter(base_df)] if base_filter is not None else base_df
     checks = [
         {
-            "label": "Cooperados por " + "/".join(group_keys),
-            "agg_col": "QTD_COOPERADOS",
+            "label": agg_col + " por " + "/".join(group_keys),
+            "agg_col": agg_col,
             "lastro_col": "CPF_LIMPO",
             "func": "size",
         }
     ]
     return export_audit_workbook(
-        Path(out_dir) / fname, agg_df, base_df, group_keys, checks
+        Path(out_dir) / fname, agg_df, lastro, group_keys, checks
     )
 
 

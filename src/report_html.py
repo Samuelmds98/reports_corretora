@@ -151,6 +151,39 @@ INDEX_TEMPLATE = """
 </html>
 """
 
+# Página estática do roadmap de growth (item 4): cards descritivos, sem link/gráfico.
+ROADMAP_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <style>
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: 'Segoe UI', Arial, sans-serif; background: #FAFAFA; color: #1A1A1A; }}
+    .header {{ background: {accent}; color: white; padding: 36px 40px; }}
+    .header h1 {{ font-size: 24px; font-weight: 600; }}
+    .header p {{ font-size: 14px; opacity: 0.85; margin-top: 6px; max-width: 760px; }}
+    .container {{ max-width: 1100px; margin: 0 auto; padding: 32px 40px; }}
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }}
+    .card {{ background: white; border-radius: 10px; padding: 20px 22px;
+             box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px dashed {accent}; }}
+    .card .num {{ font-size: 11px; color: {accent}; font-weight: 700; letter-spacing: .5px; }}
+    .card h3 {{ font-size: 16px; font-weight: 600; margin: 6px 0; }}
+    .card p {{ font-size: 13px; color: #666; line-height: 1.5; margin-top: 4px; }}
+    .card p.how {{ color: {accent}; font-weight: 600; margin-top: 10px; }}
+    .footer {{ text-align: center; font-size: 12px; color: #AAA; padding: 28px 0 40px; }}
+  </style>
+</head>
+<body>
+  <div class="header"><h1>{title}</h1><p>{subtitle}</p></div>
+  <div class="container"><div class="grid">{cards}</div></div>
+  <div class="footer">Gerado em {timestamp} — Raio X Cooperados</div>
+</body>
+</html>
+"""
+
 
 # ── Helpers de formatação e estilo ────────────────────────────────────────────
 def _money(v):
@@ -1498,6 +1531,177 @@ def _chart_age_histogram(df_base):
     return fig, insights, recs
 
 
+def _chart_acquisition_targets(df):
+    """Alvos de aquisição: prospects por especialidade + produto a ofertar (item 1)."""
+    if df is None or df.empty or "QTD_PROSPECTS" not in df.columns:
+        return _no_data()
+    d = df[df["ESPECIALIDADE"] != "Não Informado"]
+    if d.empty:
+        d = df
+    d = d.sort_values("QTD_PROSPECTS", ascending=False).head(15)
+    customdata = list(zip(d["QTD_CLIENTES"], d.get("PRODUTOS_RECOMENDADOS", "")))
+    fig = go.Figure(
+        go.Bar(
+            y=d["ESPECIALIDADE"].astype(str),
+            x=d["QTD_PROSPECTS"],
+            orientation="h",
+            marker_color=AZUL,
+            text=d["QTD_PROSPECTS"],
+            textposition="outside",
+            customdata=customdata,
+            hovertemplate=(
+                "<b>%{y}</b><br>Prospects: %{x}<br>"
+                "Clientes atuais: %{customdata[0]}<br>"
+                "Ofertar: %{customdata[1]}<extra></extra>"
+            ),
+        )
+    )
+    fig.update_yaxes(autorange="reversed", title_text="")
+    fig.update_xaxes(title_text="Prospects (mercado a conquistar)")
+    _style(fig, height=max(440, 32 * len(d)))
+    top = d.iloc[0]
+    prod = str(top.get("PRODUTOS_RECOMENDADOS", "—"))
+    insights = [
+        f"Maior alvo de aquisição: <b>{top['ESPECIALIDADE']}</b> "
+        f"({int(top['QTD_PROSPECTS'])} prospects).",
+        f"Produto(s) com mais aderência nessa especialidade (entre clientes atuais): "
+        f"<b>{prod}</b>.",
+        "A penetração vem do Mix por Especialidade (Comercial): o que já vende ao perfil "
+        "é a oferta natural para os prospects do mesmo perfil.",
+    ]
+    recs = [
+        "Montar campanha por especialidade ofertando o produto de maior penetração da carteira.",
+        "Priorizar especialidades que somam muitos prospects E alta aderência de produto.",
+        "Cruzar com a audiência acionável (e-mail + consentimento) para dimensionar o alcance.",
+    ]
+    return fig, insights, recs
+
+
+def _chart_reachable_audience(df):
+    """Audiência de campanha: prospects vs alcançáveis por e-mail (item 2)."""
+    if df is None or df.empty or "AUDIENCIA_EMAIL" not in df.columns:
+        return _no_data()
+    tot_pro = int(df["QTD_PROSPECTS"].sum())
+    tot_aud = int(df["AUDIENCIA_EMAIL"].sum())
+    pct = (tot_aud / tot_pro * 100) if tot_pro else 0
+
+    d = df[df["ESPECIALIDADE"] != "Não Informado"]
+    if d.empty:
+        d = df
+    d = d.sort_values("QTD_PROSPECTS", ascending=False).head(12)
+    cats = d["ESPECIALIDADE"].astype(str)
+    fig = go.Figure()
+    fig.add_bar(
+        y=cats,
+        x=d["QTD_PROSPECTS"],
+        name="Prospects",
+        orientation="h",
+        marker_color="#C9D6D7",
+    )
+    fig.add_bar(
+        y=cats,
+        x=d["AUDIENCIA_EMAIL"],
+        name="Alcançáveis por e-mail",
+        orientation="h",
+        marker_color=VERDE,
+    )
+    fig.update_layout(barmode="overlay")
+    fig.update_yaxes(autorange="reversed", title_text="")
+    fig.update_xaxes(title_text="Prospects")
+    _style(fig, height=max(440, 34 * len(d)))
+    insights = [
+        f"Audiência real de e-mail marketing: <b>{tot_aud}</b> prospects "
+        f"(<b>{pct:.0f}%</b> dos {tot_pro}) têm e-mail E consentimento.",
+        f"Os outros <b>{tot_pro - tot_aud}</b> prospects estão fora do alcance por e-mail "
+        "(sem e-mail ou sem consentimento) — exigem outro canal ou enriquecimento de cadastro.",
+    ]
+    recs = [
+        "Dimensionar a campanha de e-mail pela audiência acionável, não pela base bruta.",
+        "Para os não-alcançáveis: priorizar coleta de e-mail/consentimento (LGPD) ou usar telefone.",
+        "Concentrar o disparo nas especialidades com maior audiência absoluta.",
+    ]
+    return fig, insights, recs
+
+
+def _chart_persona(df, key, eixo):
+    """Distribuição de uma persona (sexo/estado civil/tipo) — cliente × prospect."""
+    if df is None or df.empty or key not in df.columns:
+        return _no_data()
+    d = df[df[key] != "Não Informado"]
+    informado = not d.empty
+    if not informado:
+        d = df
+    fig = _bar_cli_prospect(
+        d, key, eixo, horizontal=True, top=12, height=max(380, 40 * len(d))
+    )
+    top = d.sort_values("QTD_COOPERADOS", ascending=False).iloc[0]
+    insights = [
+        f"Grupo predominante: <b>{top[key]}</b> "
+        f"({int(top['QTD_COOPERADOS'])} cooperados, {top['PCT_DA_BASE']:.0f}% da base)."
+    ]
+    ni = df[df[key] == "Não Informado"]
+    if not ni.empty:
+        insights.append(
+            f"⚠ <b>{int(ni['QTD_COOPERADOS'].iloc[0])}</b> sem o campo preenchido "
+            f"({ni['PCT_DA_BASE'].iloc[0]:.0f}%) — interpretar com cautela."
+        )
+    recs = [
+        "Calibrar mensagem e oferta por segmento; tratar 'Não Informado' como gap de cadastro."
+    ]
+    return fig, insights, recs
+
+
+# ── Item 4: roadmap de dados a coletar (página estática, sem builder de dados) ──
+GROWTH_ROADMAP = [
+    (
+        "Origem do lead",
+        "De onde veio cada prospect (indicação, evento, site, parceria).",
+        "Capturar o canal de aquisição no cadastro/CRM.",
+    ),
+    (
+        "Engajamento de campanha",
+        "Aberturas, cliques e respostas por disparo.",
+        "Integrar a ferramenta de e-mail marketing (eventos por contato).",
+    ),
+    (
+        "Motivos de não-conversão",
+        "Por que um prospect não fechou (preço, timing, concorrente).",
+        "Registrar o motivo de perda no funil comercial.",
+    ),
+    (
+        "Renda / porte real",
+        "Capacidade de compra confiável (hoje RENDA/PROFISSÃO são lixo).",
+        "Sanear ou recoletar renda; enriquecer com fonte externa.",
+    ),
+    (
+        "Share of wallet externo",
+        "Quais seguros o cooperado já tem fora da corretora.",
+        "Pesquisa/declaração do cliente ou enriquecimento de mercado.",
+    ),
+    (
+        "NPS / indicação",
+        "Satisfação e propensão a indicar (motor de boca a boca).",
+        "Rodar pesquisa NPS periódica e registrar indicações.",
+    ),
+]
+
+
+def _render_growth_roadmap():
+    """HTML estático (cards) do roadmap de dados a coletar — não há dado p/ calcular hoje."""
+    cards = "".join(
+        f'<div class="card"><span class="num">A COLETAR</span><h3>{t}</h3>'
+        f'<p>{desc}</p><p class="how">▸ {how}</p></div>'
+        for t, desc, how in GROWTH_ROADMAP
+    )
+    return ROADMAP_TEMPLATE.format(
+        title="Growth — Dados a Coletar",
+        subtitle="Roadmap de métricas futuras: não há dado para calcular hoje — é a lista do que capturar",
+        cards=cards,
+        accent=AZUL,
+        timestamp=datetime.now().strftime("%d/%m/%Y %H:%M"),
+    )
+
+
 def _render_index(title, subtitle, cards, accent):
     """
     Monta o portal de navegação de um público. `cards` = lista de
@@ -1545,6 +1749,11 @@ def build_all_html_reports(
     df_birth_decade=None,
     df_age_bands=None,
     df_marketing_base=None,
+    df_acquisition_targets=None,
+    df_reachable_audience=None,
+    df_sex_dist=None,
+    df_marital_dist=None,
+    df_client_type_dist=None,
     root_dir=None,
 ):
     """
@@ -1736,6 +1945,47 @@ def build_all_html_reports(
             "Status_Base.xlsx",
             "mkt",
         ),
+        (
+            "06_alvos_aquisicao.html",
+            "Alvos de Aquisição (Prospects × Produto)",
+            "Por especialidade: prospects a conquistar + produto que mais "
+            "pega no perfil",
+            lambda: _chart_acquisition_targets(df_acquisition_targets),
+            "Alvos_Aquisicao.xlsx",
+            "mkt",
+        ),
+        (
+            "07_audiencia_campanha.html",
+            "Audiência de Campanha (E-mail Acionável)",
+            "Prospects realmente alcançáveis: e-mail + consentimento",
+            lambda: _chart_reachable_audience(df_reachable_audience),
+            "Audiencia_Campanha.xlsx",
+            "mkt",
+        ),
+        (
+            "08_personas_sexo.html",
+            "Personas — Sexo",
+            "Distribuição por sexo (clientes × prospects)",
+            lambda: _chart_persona(df_sex_dist, "SEXO_LABEL", "Cooperados"),
+            "Personas_Sexo.xlsx",
+            "mkt",
+        ),
+        (
+            "09_personas_estado_civil.html",
+            "Personas — Estado Civil",
+            "Distribuição por estado civil (campo ~41% preenchido)",
+            lambda: _chart_persona(df_marital_dist, "ESTADO_CIVIL", "Cooperados"),
+            "Personas_Estado_Civil.xlsx",
+            "mkt",
+        ),
+        (
+            "10_personas_tipo.html",
+            "Personas — Tipo de Cliente",
+            "Distribuição por tipo de cliente (clientes × prospects)",
+            lambda: _chart_persona(df_client_type_dist, "TIPO_CLIENTE", "Cooperados"),
+            "Personas_Tipo.xlsx",
+            "mkt",
+        ),
     ]
 
     dirs = {"com": com_dir, "oper": oper_dir, "mkt": mkt_dir}
@@ -1754,6 +2004,19 @@ def build_all_html_reports(
             print(f"  ok {audience}/{filename}")
         except Exception as e:
             print(f"  falha {filename}: {e}")
+
+    # Item 4: roadmap de growth (página estática, sem builder de dados) — só Marketing
+    if mkt_dir is not None:
+        try:
+            roadmap_html = _render_growth_roadmap()
+            fn = "11_growth_roadmap.html"
+            saved.append(save_report(roadmap_html, fn, mkt_dir))
+            index_cards["mkt"].append(
+                (fn, "11", "Growth — Dados a Coletar", "Roadmap de métricas futuras")
+            )
+            print(f"  ok mkt/{fn} (roadmap estático)")
+        except Exception as e:
+            print(f"  falha 11_growth_roadmap.html: {e}")
 
     # Portais de navegação (índice) — um por público, consolidando seus HTMLs
     portais = {

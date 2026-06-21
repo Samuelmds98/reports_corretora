@@ -21,53 +21,97 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
-from src.analytics import (build_abc_curve, build_abc_curve_comissao,
-                           build_cadastro_completeness,
-                           build_cancellation_rate,
-                           build_commission_margin_produto,
-                           build_commission_margin_seguradora_produto,
-                           build_cross_sell_matrix, build_demographics,
-                           build_monthly_active_snapshot,
-                           build_origination_sums, build_partner_performance,
-                           build_partner_performance_comissao,
-                           build_partner_share_by_count, build_portfolio_depth,
-                           build_producao_enriquecida,
-                           build_producer_performance,
-                           build_product_distribution, build_renewal_agenda,
-                           build_snapshot_grain, build_specialty_gaps,
-                           build_specialty_mix, build_time_series_growth,
-                           build_winback_candidates)
-from src.audit import (audit_abc, audit_abc_comissao, audit_acionabilidade,
-                       audit_calculadora, audit_cohort, audit_completude,
-                       audit_demografia, audit_margem_produto,
-                       audit_margem_seg_produto, audit_margem_seguradora,
-                       audit_market_share, audit_marketing, audit_mix,
-                       audit_origem_cadastro, audit_origination,
-                       audit_partner_count, audit_portfolio_depth,
-                       audit_producer, audit_product_distribution,
-                       audit_renovacoes, audit_snapshot, audit_status_situacao,
-                       audit_winback)
-from src.data_quality_advanced import (build_dq_summary,
-                                       detect_commission_exceeds_premio,
-                                       detect_exact_duplicates,
-                                       detect_percentage_inconsistency,
-                                       detect_percentage_outliers,
-                                       detect_premio_outliers,
-                                       detect_zero_negative_premio)
+from src.analytics import (
+    build_abc_curve,
+    build_abc_curve_comissao,
+    build_cadastro_completeness,
+    build_cancellation_rate,
+    build_commission_margin_produto,
+    build_commission_margin_seguradora_produto,
+    build_cross_sell_matrix,
+    build_demographics,
+    build_monthly_active_snapshot,
+    build_origination_sums,
+    build_partner_performance,
+    build_partner_performance_comissao,
+    build_partner_share_by_count,
+    build_portfolio_depth,
+    build_producao_enriquecida,
+    build_producer_performance,
+    build_product_distribution,
+    build_renewal_agenda,
+    build_snapshot_grain,
+    build_specialty_gaps,
+    build_specialty_mix,
+    build_time_series_growth,
+    build_winback_candidates,
+)
+from src.audit import (
+    audit_abc,
+    audit_abc_comissao,
+    audit_acionabilidade,
+    audit_calculadora,
+    audit_cohort,
+    audit_completude,
+    audit_demografia,
+    audit_margem_produto,
+    audit_margem_seg_produto,
+    audit_margem_seguradora,
+    audit_market_share,
+    audit_marketing,
+    audit_mix,
+    audit_origem_cadastro,
+    audit_origination,
+    audit_partner_count,
+    audit_portfolio_depth,
+    audit_producer,
+    audit_product_distribution,
+    audit_renovacoes,
+    audit_snapshot,
+    audit_status_situacao,
+    audit_winback,
+)
+from src.data_quality_advanced import (
+    build_dq_summary,
+    detect_commission_exceeds_premio,
+    detect_exact_duplicates,
+    detect_percentage_inconsistency,
+    detect_percentage_outliers,
+    detect_premio_outliers,
+    detect_zero_negative_premio,
+)
 from src.excel_report import export_formatted_workbook
-from src.functions import (build_cycle_grain, clean_cpf_cnpj, flag_last_cycle,
-                           generate_client_insights, identify_root_conflicts,
-                           prepare_demographics)
+from src.functions import (
+    build_cycle_grain,
+    clean_cpf_cnpj,
+    flag_last_cycle,
+    generate_client_insights,
+    identify_root_conflicts,
+    prepare_demographics,
+)
 from src.guardrails import build_run_context
-from src.marketing import (build_age_bands, build_base_status,
-                           build_birth_decade, build_marketing_base,
-                           build_specialty_distribution)
-from src.operacional import (add_contact_flags, build_active_with_cancellation,
-                             build_contact_lookup,
-                             build_contactability_by_producer,
-                             build_origem_cadastro, build_renewal_as_new,
-                             build_situacao_ativa_vencida,
-                             build_status_vs_situacao)
+from src.marketing import (
+    build_acquisition_targets,
+    build_age_bands,
+    build_base_status,
+    build_birth_decade,
+    build_client_type_distribution,
+    build_marital_distribution,
+    build_marketing_base,
+    build_reachable_audience,
+    build_sex_distribution,
+    build_specialty_distribution,
+)
+from src.operacional import (
+    add_contact_flags,
+    build_active_with_cancellation,
+    build_contact_lookup,
+    build_contactability_by_producer,
+    build_origem_cadastro,
+    build_renewal_as_new,
+    build_situacao_ativa_vencida,
+    build_status_vs_situacao,
+)
 from src.parameters import PRODUCT_TYPE_MAP, normalize_producer
 from src.persistence import append_dq_history, export_parquet_tables
 from src.quality import run_full_audit
@@ -412,12 +456,19 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
     df_ativa_vencida = build_situacao_ativa_vencida(df_prod)
     df_contact_prod = build_contactability_by_producer(df_prod, df_cad)
 
-    # Track MARKETING (base inteira: cliente × prospect + demografia)
-    df_mkt_base = build_marketing_base(df_cruzamento)
+    # Track MARKETING (base inteira: cliente × prospect + demografia + personas)
+    # contact_lookup (calculado acima) anexa e-mail/consentimento → audiência de campanha.
+    df_mkt_base = build_marketing_base(df_cruzamento, contact_lookup)
     df_base_status = build_base_status(df_mkt_base)
     df_spec_dist = build_specialty_distribution(df_mkt_base)
     df_birth_decade = build_birth_decade(df_mkt_base)
     df_age_bands = build_age_bands(df_mkt_base)
+    # Personas (item 3) + alvos de aquisição (item 1) + audiência acionável (item 2)
+    df_sex_dist = build_sex_distribution(df_mkt_base)
+    df_marital_dist = build_marital_distribution(df_mkt_base)
+    df_client_type_dist = build_client_type_distribution(df_mkt_base)
+    df_acq_targets = build_acquisition_targets(df_mkt_base, df_specialty)
+    df_audience = build_reachable_audience(df_mkt_base)
 
     # Grãos granulares (lastro de auditoria + tabelas para Power BI)
     df_snapshot_grain = build_snapshot_grain(df_cycle)
@@ -503,7 +554,12 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
         ("2_Distribuicao_Especialidade", df_spec_dist),
         ("3_Decada_Nascimento", df_birth_decade),
         ("4_Faixa_Etaria", df_age_bands),
-        ("5_Base_Cooperados", df_mkt_base),
+        ("5_Alvos_Aquisicao", df_acq_targets),
+        ("6_Audiencia_Campanha", df_audience),
+        ("7_Personas_Sexo", df_sex_dist),
+        ("8_Personas_Estado_Civil", df_marital_dist),
+        ("9_Personas_Tipo", df_client_type_dist),
+        ("10_Base_Cooperados", df_mkt_base),
     ]
     mkt_ok = export_formatted_workbook(mkt_exports, MKT_REPORT_FILE)
 
@@ -535,6 +591,11 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
         df_birth_decade=df_birth_decade,
         df_age_bands=df_age_bands,
         df_marketing_base=df_mkt_base,
+        df_acquisition_targets=df_acq_targets,
+        df_reachable_audience=df_audience,
+        df_sex_dist=df_sex_dist,
+        df_marital_dist=df_marital_dist,
+        df_client_type_dist=df_client_type_dist,
         root_dir=OUTPUTS,
     )
 
@@ -585,6 +646,11 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
         "distribuicao_especialidade": df_spec_dist,
         "decada_nascimento": df_birth_decade,
         "faixa_etaria": df_age_bands,
+        "alvos_aquisicao": df_acq_targets,
+        "audiencia_campanha": df_audience,
+        "personas_sexo": df_sex_dist,
+        "personas_estado_civil": df_marital_dist,
+        "personas_tipo": df_client_type_dist,
     }
     export_parquet_tables(com_parquet, COM_PARQUET_DIR)
     export_parquet_tables(oper_parquet, OPER_PARQUET_DIR)
@@ -654,6 +720,46 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
             df_age_bands,
             df_mkt_base,
             ["FAIXA_ETARIA_3"],
+        ),
+        # Alvos de aquisição e audiência contam só PROSPECTS → lastro filtrado
+        audit_marketing(
+            MKT_AUDIT_DIR,
+            "Alvos_Aquisicao.xlsx",
+            df_acq_targets,
+            df_mkt_base,
+            ["ESPECIALIDADE"],
+            agg_col="QTD_PROSPECTS",
+            base_filter=lambda b: b["EH_PROSPECT"],
+        ),
+        audit_marketing(
+            MKT_AUDIT_DIR,
+            "Audiencia_Campanha.xlsx",
+            df_audience,
+            df_mkt_base,
+            ["ESPECIALIDADE"],
+            agg_col="QTD_PROSPECTS",
+            base_filter=lambda b: b["EH_PROSPECT"],
+        ),
+        audit_marketing(
+            MKT_AUDIT_DIR,
+            "Personas_Sexo.xlsx",
+            df_sex_dist,
+            df_mkt_base,
+            ["SEXO_LABEL"],
+        ),
+        audit_marketing(
+            MKT_AUDIT_DIR,
+            "Personas_Estado_Civil.xlsx",
+            df_marital_dist,
+            df_mkt_base,
+            ["ESTADO_CIVIL"],
+        ),
+        audit_marketing(
+            MKT_AUDIT_DIR,
+            "Personas_Tipo.xlsx",
+            df_client_type_dist,
+            df_mkt_base,
+            ["TIPO_CLIENTE"],
         ),
     ]
 

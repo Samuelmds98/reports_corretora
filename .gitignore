@@ -24,6 +24,7 @@ data/*.xls
 data/*.csv
 
 #TCC
+docs/apresentacao/
 
 # Outputs gerados — por padrão NÃO versionar (contêm dados REAIS quando rodado com data/raw).
 # EXCEÇÃO: resultados FICTÍCIOS (gerados de data/exemplo) — só HTML e XLSX — p/ apresentação.

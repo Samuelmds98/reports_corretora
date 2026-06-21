@@ -23,6 +23,9 @@ consolidada: cada análise é feita à mão, no Excel, sem rastreabilidade e sem
    - ~40% da base é **carga migrada**, que enviesa as séries de venda.
 4. **Força de vendas e acionabilidade no escuro** — sem leitura de desempenho por
    produtor nem de quais clientes têm telefone/e-mail para serem trabalhados.
+5. **Maioria da base invisível.** O Comercial enxerga só quem já comprou (grão de
+   produção), mas **68% dos cooperados são prospects** — nunca converteram. Sem visão
+   de quem ainda dá para conquistar, por especialidade, idade ou persona.
 
 ## A solução
 
@@ -30,10 +33,12 @@ Um **motor de analytics em Python** que, a partir dos dois Excel, **saneia, apli
 regras de negócio, calcula status e rating por cliente** e gera um **"data warehouse
 local"** pronto para consumo — com três pilares de diferenciação:
 
-- **Segmentado por dois públicos** (decisão do gestor): trilha **Comercial** (vendas/CRM:
+- **Segmentado por três públicos** (decisão do gestor): trilha **Comercial** (vendas/CRM:
   curva ABC, cross-sell, market share, agenda de renovações, win-back, margens,
-  performance de produtor…) e trilha **Operacional/Qualidade** (completude de cadastro,
-  status×situação, detectores de furos de processo, acionabilidade, testes de DQ).
+  performance de produtor…), trilha **Operacional/Qualidade** (completude de cadastro,
+  status×situação, detectores de furos de processo, acionabilidade, testes de DQ) e trilha
+  **Marketing** (a base INTEIRA — cliente × prospect: demografia, personas, **alvos de
+  aquisição** por especialidade, **audiência de campanha** realmente alcançável por e-mail).
 - **Qualidade como cidadão de 1ª classe**: o motor **só sinaliza, nunca corrige** —
   expõe os furos de cadastro/processo para o backoffice sanear na origem.
 - **Rastreabilidade total**: cada número de cada relatório tem o seu **lastro** até a
@@ -47,9 +52,12 @@ Enquanto os valores não são saneados, o foco é a **abordagem qualitativa/não
 - **Comercial:** workbook de 22 abas + **12 relatórios HTML** interativos com insights e
   recomendações + portal de navegação + Parquet para Power BI + workbooks de auditoria.
 - **Operacional/Qualidade:** workbook de 9 abas + **5 HTML** + portal + DQ + logs.
+- **Marketing:** workbook de 10 abas + **11 HTML** (status da base, especialidade, década,
+  faixa etária, histograma, alvos de aquisição, audiência de campanha, personas
+  sexo/estado civil/tipo, **roadmap "Growth — dados a coletar"**) + portal + parquet + auditoria.
 - **Camada de consulta** (MVP de plataforma): um **DuckDB** sobre os dados, para SQL
   ad-hoc sobre toda a base num só lugar.
-- **Índice central** que conecta os dois painéis.
+- **Índice central** que conecta os três painéis.
 
 ## Impacto
 
@@ -59,5 +67,9 @@ Enquanto os valores não são saneados, o foco é a **abordagem qualitativa/não
 - **Operacional:** uma lista concreta de **220 apólices com status defasado**, **9
   prováveis renovações mal cadastradas**, **108 registros em regras críticas de DQ** —
   trabalho de saneamento priorizado, não achismo.
+- **Marketing:** enxergar os **prospects** (a maioria invisível ao Comercial) e
+  transformá-los em campanha — alvos de aquisição por especialidade com o produto de
+  maior aderência, e o **tamanho real da audiência** alcançável por e-mail (com
+  consentimento), não a base bruta.
 - **Gestão:** a ferramenta transforma dois Excel soltos em **decisão baseada em dados**,
   com governança e um caminho claro de evolução para uma plataforma.
