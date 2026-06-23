@@ -302,20 +302,27 @@ def _chart_abc(df_abc):
     }
     bar_colors = [cor_classe.get(str(c).split(" (")[0], AZUL) for c in top["CURVA_ABC"]]
 
+    # Eixo X POSICIONAL (0..N-1): preserva a ordem do Pareto. Um eixo categórico de
+    # CPF (string) é reordenado pelo Plotly e embaralha as barras já ordenadas; como
+    # os rótulos do eixo ficam ocultos, o índice posicional é equivalente e correto.
+    xpos = list(range(len(top)))
+    cpf_str = top["CPF_LIMPO"].astype(str)
+
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(
         go.Bar(
-            x=top["CPF_LIMPO"].astype(str),
+            x=xpos,
             y=top["TOTAL_PREMIO_LIQ"],
             marker_color=bar_colors,
             name="Prêmio líquido",
-            hovertemplate="CPF %{x}<br>Prêmio: R$ %{y:,.0f}<extra></extra>",
+            customdata=cpf_str,
+            hovertemplate="Cooperado %{customdata}<br>Prêmio: R$ %{y:,.0f}<extra></extra>",
         ),
         secondary_y=False,
     )
     fig.add_trace(
         go.Scatter(
-            x=top["CPF_LIMPO"].astype(str),
+            x=xpos,
             y=top["%_ACUMULADO"] * 100,
             mode="lines+markers",
             line=dict(color=AZUL, width=2),
@@ -671,10 +678,13 @@ def _chart_winback(df_winback):
     df = df_winback.copy().sort_values("TOTAL_PREMIO_HISTORICO", ascending=False)
     top = df.head(20).iloc[::-1]  # invertido p/ maior no topo do gráfico horizontal
 
+    # Eixo Y POSICIONAL (preserva a ordem por prêmio): um eixo categórico de CPF é
+    # reordenado pelo Plotly e embaralha as barras. Rótulos ocultos → índice equivale.
+    ypos = list(range(len(top)))
     fig = go.Figure(
         go.Bar(
             x=top["TOTAL_PREMIO_HISTORICO"],
-            y=top["CPF_LIMPO"].astype(str),
+            y=ypos,
             orientation="h",
             marker=dict(
                 color=top["DIAS_INATIVO"],
@@ -682,12 +692,17 @@ def _chart_winback(df_winback):
                 colorbar=dict(title="Dias inativo"),
             ),
             customdata=np.stack(
-                [top["DIAS_INATIVO"], top["LISTA_PRODUTOS_ATIVOS"].astype(str)], axis=-1
+                [
+                    top["CPF_LIMPO"].astype(str),
+                    top["DIAS_INATIVO"],
+                    top["LISTA_PRODUTOS_ATIVOS"].astype(str),
+                ],
+                axis=-1,
             ),
             hovertemplate=(
-                "CPF %{y}<br>Prêmio histórico: R$ %{x:,.0f}"
-                "<br>Dias inativo: %{customdata[0]}"
-                "<br>Produtos: %{customdata[1]}<extra></extra>"
+                "CPF %{customdata[0]}<br>Prêmio histórico: R$ %{x:,.0f}"
+                "<br>Dias inativo: %{customdata[1]}"
+                "<br>Produtos: %{customdata[2]}<extra></extra>"
             ),
         )
     )
@@ -802,20 +817,25 @@ def _chart_abc_comissao(df_abc_com):
         cor_classe.get(str(c).split(" (")[0], AZUL) for c in top["CURVA_ABC_COMISSAO"]
     ]
 
+    # Eixo X posicional (preserva a ordem do Pareto — ver nota em _chart_abc).
+    xpos = list(range(len(top)))
+    cpf_str = top["CPF_LIMPO"].astype(str)
+
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(
         go.Bar(
-            x=top["CPF_LIMPO"].astype(str),
+            x=xpos,
             y=top["TOTAL_COMISSAO"],
             marker_color=bar_colors,
             name="Comissão",
-            hovertemplate="CPF %{x}<br>Comissão: R$ %{y:,.0f}<extra></extra>",
+            customdata=cpf_str,
+            hovertemplate="Cooperado %{customdata}<br>Comissão: R$ %{y:,.0f}<extra></extra>",
         ),
         secondary_y=False,
     )
     fig.add_trace(
         go.Scatter(
-            x=top["CPF_LIMPO"].astype(str),
+            x=xpos,
             y=top["%_ACUMULADO"] * 100,
             mode="lines+markers",
             line=dict(color=AZUL, width=2),

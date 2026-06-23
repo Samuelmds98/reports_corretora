@@ -74,6 +74,33 @@ CIDADES = [
 ]
 ESTADOS_CIVIS = ["Solteiro", "Casado", "Divorciado", "Viúvo", "União Estável"]
 SEXOS = ["M", "F"]
+# Variedade p/ a base de exemplo refletir múltiplos rótulos (evita campos "constantes"
+# que apareceriam como cinza/"Inútil" na Completude e gráficos de 1 só barra).
+ESTADOS = [
+    "CE",
+    "CE",
+    "CE",
+    "PE",
+    "RN",
+    "PB",
+    "BA",
+]  # majoritariamente CE (coop regional)
+PROFISSOES = [
+    "Médico",
+    "Médico",
+    "Cirurgião",
+    "Anestesista",
+    "Clínico Geral",
+    "Pediatra",
+]
+TIPOS_PESSOA = ["Pessoa Física"] * 6 + ["Pessoa Jurídica"]  # ~15% PJ (clínicas)
+PRODUTORES = [
+    "Ana Vendas",
+    "Bruno Corretor",
+    "Carla Seguros",
+    "Diego Comercial",
+    "Equipe Digital",
+]
 NOMES = [
     "Ana",
     "Bruno",
@@ -146,7 +173,7 @@ def gerar_cadastro():
                 "NIVEL": "Cooperado",
                 "DIVISAO": random.choice(["Divisão A", "Divisão B", "Divisão C"]),
                 "NOME": nome,
-                "TIPO": "Pessoa Física",
+                "TIPO": random.choice(TIPOS_PESSOA),
                 "CLIENTE DESDE": data_aleatoria(
                     pd.Timestamp("2015-01-01"), HOJE
                 ).strftime("%d/%m/%Y"),
@@ -180,8 +207,8 @@ def gerar_cadastro():
                     ["Centro", "Aldeota", "Meireles", "Messejana", "Parquelândia"]
                 ),
                 "CIDADE": random.choice(CIDADES),
-                "ESTADO": "CE",
-                "PROFISSÃO": "Médico",
+                "ESTADO": random.choice(ESTADOS),
+                "PROFISSÃO": random.choice(PROFISSOES),
                 "ESTADO CIVIL": random.choice(ESTADOS_CIVIS),
                 "RENDA FAMILIAR/FATURAMENTO MÉDIO": random.randint(8000, 60000),
                 "QTDE FILHOS/QTDE FUNCIONÁRIOS": random.randint(0, 4),
@@ -444,6 +471,10 @@ def gerar_producao(df_cad, cpfs_cad):
 
     df = pd.DataFrame(linhas)
 
+    # Produtor por CPF (carteira de cada produtor) — múltiplos rótulos na acionabilidade.
+    cpf_produtor = {c: random.choice(PRODUTORES) for c in df["CPF/CNPJ"].unique()}
+    df["PRODUTOR"] = df["CPF/CNPJ"].map(cpf_produtor)
+
     # Produto não mapeado (furo)
     for idx in df.sample(5, random_state=SEED).index:
         df.loc[idx, "NOME ABREVIADO DO PRODUTO"] = PRODUTO_NAO_MAPEADO
@@ -476,13 +507,15 @@ def injetar_furos(df):
             df.loc[idx, "COMISSÃO"] * rng.uniform(1.3, 2.5), 2
         )
         df.loc[idx, "COMISSÃO TOTAL (CORRET + CO-CORRET)"] = df.loc[idx, "COMISSÃO"]
-    # Outliers de prêmio: 2 valores extremos no grupo coeso AUTOMÓVEL×ALFA
+    # Outliers de prêmio: 2 valores extremos no grupo coeso AUTOMÓVEL×ALFA. Magnitude
+    # moderada (≈10× o normal de ~3-4k do grupo): dispara o detector de outlier (±3σ)
+    # sem dominar o eixo da Curva ABC e deixá-la ilegível.
     alvo = df.index[
         (df["NOME ABREVIADO DO PRODUTO"] == "AUTOMÓVEL")
         & (df["SEGURADORA (ABREVIADO)"] == SEG_ABREV["Seguradora Alfa"])
     ].to_numpy()
     for idx in alvo[:2]:
-        df.loc[idx, "PRÊMIO LÍQ. DO SEGURO"] = round(rng.uniform(140000, 160000), 2)
+        df.loc[idx, "PRÊMIO LÍQ. DO SEGURO"] = round(rng.uniform(40000, 55000), 2)
     # Vigência invertida (término < início)
     for idx in amostra(5):
         ini = df.loc[idx, "INÍCIO DE VIGÊNCIA"]
