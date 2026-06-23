@@ -1,4 +1,4 @@
-# Guia de Métricas Qualitativas (Raio X Qualitativo)
+# Guia de Métricas Qualitativas (não-monetárias)
 
 > Métricas **não-monetárias** — não dependem de prêmio nem de comissão. Pensadas para a
 > abordagem inicial ao gerente enquanto a confiabilidade dos valores é baixa, usando só
@@ -203,7 +203,7 @@ Já existem no pipeline e podem ser apresentadas omitindo as colunas de valor (d
 ## 9. Roteiro sugerido para o gerente
 
 1. **Completude do Cadastro** (§2) — mostra o estado do cadastro e justifica a abordagem.
-2. **Raio X por Especialidade** — Mix por especialidade + conversão + rating (especialidade
+2. **Análise por Especialidade** — Mix por especialidade + conversão + rating (especialidade
    é 100% confiável).
 3. **Profundidade / Mono-produto** (§5) — "~70% dos produtores têm só 1 produto" → pipeline
    de expansão priorizado por rating.

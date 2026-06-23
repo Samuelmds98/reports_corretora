@@ -1,4 +1,4 @@
-# Changelog — Raio X Cooperados
+# Changelog — Reports Corretora
 
 Registro das fases de implementação, decisões arquiteturais e desvios do plano original.
 Ordenado do mais recente para o mais antigo.
@@ -39,7 +39,7 @@ Expansão do track Marketing com os 4 itens do `TODO.md`, todos não-monetários
   (cards) documentando métricas futuras e dados a capturar (origem do lead, engajamento de
   campanha, motivos de não-conversão, renda real, share of wallet, NPS). Sem builder de dados.
 
-**Saídas:** `Marketing_RaioX.xlsx` passa a 10 abas; 11 HTMLs (06–10 novos + 11 roadmap);
+**Saídas:** `Marketing_Reports.xlsx` passa a 10 abas; 11 HTMLs (06–10 novos + 11 roadmap);
 parquet ganha `alvos_aquisicao`, `audiencia_campanha`, `personas_*`; auditoria ganha 5
 workbooks (alvos/audiência contam só prospects via `audit_marketing(..., agg_col=
 "QTD_PROSPECTS", base_filter=...)`).
@@ -57,7 +57,7 @@ O 3º track olha a base INTEIRA de cadastro.
 `build_specialty_distribution` (cliente × prospect), `build_birth_decade`,
 `build_age_bands` (Até 40 / 41 a 59 / 60+).
 
-**Saídas (`outputs/marketing/`):** `Marketing_RaioX.xlsx` (5 abas) + 5 HTML (status,
+**Saídas (`outputs/marketing/`):** `Marketing_Reports.xlsx` (5 abas) + 5 HTML (status,
 especialidade, década, faixa etária, **histograma de idade**) + portal + parquet + 4
 workbooks de auditoria. `build_all_html_reports` roteia 3 públicos (`com`/`oper`/`mkt`);
 o índice central linka os **3 painéis**. Warehouse DuckDB ganha o schema `marketing.*` +
@@ -71,11 +71,11 @@ o índice central linka os **3 painéis**. Warehouse DuckDB ganha o schema `mark
   qualidade que antes só existiam no Excel — prêmio zerado/negativo, comissão > prêmio,
   inconsistência %, outliers, duplicatas. Mostra a **visão agregada** (ocorrências e
   severidade por regra, vindas de `build_dq_summary`); o rodapé linka o registro-a-registro
-  em `DQ_Raio_X_Cooperados.xlsx`.
+  em `DQ_Reports.xlsx`.
 - **Bloco de rodapé generalizado** (`_audit_block`): além do `../auditoria/<wb>.xlsx`
   (lastro das visões comerciais), aceita link customizado para o XLSX detalhado. Agora
   **todos os HTMLs têm rodapé de auditoria**: comerciais → workbook de lastro; operacionais
-  → `Operacional_Qualidade_RaioX.xlsx`; DQ → `DQ_Raio_X_Cooperados.xlsx`. O único sem link
+  → `Operacional_Qualidade_Reports.xlsx`; DQ → `DQ_Reports.xlsx`. O único sem link
   antes (`04_cross_sell`) passou a apontar para `Calculadora_Produtos.xlsx`.
 
 **Produtor:**
@@ -88,7 +88,7 @@ o índice central linka os **3 painéis**. Warehouse DuckDB ganha o schema `mark
   tira o viés de mix (recorrente não "renova" como apólice anual). Vira a métrica de
   retenção exibida no HTML.
 
-**MVP de plataforma — DuckDB** (`scripts/build_warehouse.py`): projeta `outputs/raio_x.duckdb`
+**MVP de plataforma — DuckDB** (`scripts/build_warehouse.py`): projeta `outputs/reports.duckdb`
 com 1 view por Parquet (schemas `comercial.*`/`operacional.*`) + views `gold.*`
 (`kpis`, `produtores_externos`, `renovacoes_por_urgencia`, `qualidade_resumo`,
 `margem_seg_produto_top`). SQL ad-hoc via `--sql`. Cada gold view é isolada (fonte ausente
@@ -142,10 +142,10 @@ Após a apresentação inicial, o gerente pediu **separação clara** entre arte
 comerciais e operacionais/qualidade — o projeto passa a servir **2 públicos**.
 
 **Segmentação física dos outputs (2 árvores):**
-- `outputs/comercial/` — `Comercial_RaioX.xlsx` (21 abas) + `visuals/` + `parquet/` +
+- `outputs/comercial/` — `Comercial_Reports.xlsx` (21 abas) + `visuals/` + `parquet/` +
   `auditoria/`. Vendas/CRM/margens.
-- `outputs/operacional/` — `Operacional_Qualidade_RaioX.xlsx` (7 abas) + `visuals/` +
-  `parquet/` + `DQ_Raio_X_Cooperados.xlsx` + `Log_Apolices_Conflito` + `dq_history`.
+- `outputs/operacional/` — `Operacional_Qualidade_Reports.xlsx` (7 abas) + `visuals/` +
+  `parquet/` + `DQ_Reports.xlsx` + `Log_Apolices_Conflito` + `dq_history`.
 - `build_all_html_reports` agora roteia cada HTML por público (campo `com`/`oper`);
   parquet e auditoria também segmentados. Substitui o antigo `Mapping_Comercial_*` +
   `Raio_X_Qualitativo` (cujas abas foram redistribuídas).
@@ -302,7 +302,7 @@ são não-monetários (contagens), então também entram.
   sem sobrescrever `data/raw`; checagem amigável se os arquivos não existirem.
 
 ### Inventário de saídas (estado atual)
-- Relatório principal: **16 abas** (1–7, 10–18) · `DQ_Raio_X_Cooperados.xlsx` (10 abas) ·
+- Relatório principal: **16 abas** (1–7, 10–18) · `DQ_Reports.xlsx` (10 abas) ·
   `Raio_X_Qualitativo.xlsx` (6 abas)
 - **17** workbooks de auditoria · **11** HTMLs · **26** Parquets · histórico `dq_history.parquet`
 
@@ -458,7 +458,7 @@ são não-monetários (contagens), então também entram.
   - `detect_percentage_outliers` — outliers de percentual de comissão (mesma lógica)
   - `detect_exact_duplicates` — duplicatas exatas pela chave transacional
   - `build_dq_summary` — resumo executivo com severidade por regra
-- Novo arquivo de saída: `outputs/reports/DQ_Raio_X_Cooperados.xlsx` (10 abas)
+- Novo arquivo de saída: `outputs/reports/DQ_Reports.xlsx` (10 abas)
 - Abas 8 e 9 migradas do relatório principal para o arquivo DQ
 - Relatório principal passa a ser exclusivamente de negócio (abas 1–7 + 10–13)
 

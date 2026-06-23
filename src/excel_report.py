@@ -42,14 +42,14 @@ SHEET_HEADER_COLORS = {
     "16_CurvaABC_Comissao": LARANJA,
     "17_Margem_Comissao_Seguradora": LARANJA,
     "18_Margem_Comissao_Produto": LARANJA,
-    # Relatório Raio X Qualitativo (Raio_X_Qualitativo.xlsx)
+    # Apoio não-monetário (abas distribuídas nos workbooks Comercial/Operacional)
     "0_Completude_Cadastro": AZUL,
     "1_Mix_Produtos": VERDE,
     "2_Market_Share_Contagem": VERDE_LIMA,
     "3_Profundidade_Carteira": VERDE,
     "4_Taxa_Cancelamento": LARANJA,
     "5_CrossSell_Gaps_Especialidade": LARANJA,
-    # Arquivo de qualidade DQ (DQ_Raio_X_Cooperados.xlsx)
+    # Arquivo de qualidade DQ (DQ_Reports.xlsx)
     "0_RESUMO_DQ": AZUL,
     "1_PREMIO_ZERADO_NEGATIVO": LARANJA,
     "2_COMISSAO_MAIOR_PREMIO": LARANJA,

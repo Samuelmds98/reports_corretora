@@ -292,7 +292,7 @@ distinto — é por isso que `PRIMEIRO_INICIO`/`ULTIMO_TERMINO` seguem mín./má
 - Produto mal classificado (não-RENOVÁVEL) → não aparece, mesmo devendo renovar.
 - **Renovação com número de apólice totalmente diferente** (sem raiz comum) é vista como
   apólice nova → os ciclos não se ligam e o prêmio do ciclo anterior pode reaparecer.
-  Aparece no `Log_Apolices_Conflito_RaioX` quando a raiz colide; quando nem a raiz bate,
+  Aparece no `Log_Apolices_Conflito_Reports` quando a raiz colide; quando nem a raiz bate,
   só dá para detectar no cruzamento manual.
 
 ---
@@ -424,7 +424,7 @@ Visual: dispersão prêmio × taxa efetiva (bolha = comissão) em `12_margem_com
 
 ## 17. Qualidade de Dados (DQ)
 
-Arquivo `DQ_Raio_X_Cooperados.xlsx` — **só sinaliza, nunca corrige**. Regras:
+Arquivo `DQ_Reports.xlsx` — **só sinaliza, nunca corrige**. Regras:
 - **Prêmio zerado/negativo** em apólice (CRÍTICO).
 - **Comissão > prêmio** (CRÍTICO — operacionalmente impossível).
 - **Inconsistência percentual:** comissão real diverge > 1% de `prêmio × %` (ALERTA).

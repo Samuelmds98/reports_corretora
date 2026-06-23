@@ -25,7 +25,7 @@
    ├─ operacional/  (workbook 9 abas + 5 HTML + portal + DQ + logs + auditoria)
    ├─ marketing/    (workbook 10 abas + 11 HTML + portal + parquet + auditoria)
    ├─ index.html    (índice central — conecta os 3 painéis)
-   └─ raio_x.duckdb (camada de consulta SQL — MVP de plataforma)
+   └─ reports.duckdb (camada de consulta SQL — MVP de plataforma)
 ```
 
 ## 2. Módulos (`src/`) — funções puras DataFrame → DataFrame

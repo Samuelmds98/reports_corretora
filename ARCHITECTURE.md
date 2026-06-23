@@ -12,7 +12,7 @@ data/raw/ (2 Excel) → load_data (carimba ID_LINHA) → prepare_cadastro / prep
   → build_run_context (guardrails) → builders (analytics / operacional / marketing)
   → DQ + auditoria → exporta SEGMENTADO por público
         → outputs/{comercial,operacional,marketing}/  + outputs/index.html
-scripts/build_warehouse.py → outputs/raio_x.duckdb (views SQL sobre os Parquet)
+scripts/build_warehouse.py → outputs/reports.duckdb (views SQL sobre os Parquet)
 ```
 
 Decisão: **mantém-se monolítico** (volume ~5k linhas; simples e idempotente). Funções são

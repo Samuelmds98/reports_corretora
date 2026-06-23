@@ -1,5 +1,5 @@
 """
-Main.py — Pipeline principal "Raio X Cooperados".
+Main.py — Pipeline principal "Reports Corretora".
 
 Substitui o antigo notebook `06_cruzamento_cadastro_producao.ipynb`: lê os dois
 Excel brutos, roda o motor de saneamento + rating, cruza cadastro × produção,
@@ -21,97 +21,56 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 
-from src.analytics import (
-    build_abc_curve,
-    build_abc_curve_comissao,
-    build_cadastro_completeness,
-    build_cancellation_rate,
-    build_commission_margin_produto,
-    build_commission_margin_seguradora_produto,
-    build_cross_sell_matrix,
-    build_demographics,
-    build_monthly_active_snapshot,
-    build_origination_sums,
-    build_partner_performance,
-    build_partner_performance_comissao,
-    build_partner_share_by_count,
-    build_portfolio_depth,
-    build_producao_enriquecida,
-    build_producer_performance,
-    build_product_distribution,
-    build_renewal_agenda,
-    build_snapshot_grain,
-    build_specialty_gaps,
-    build_specialty_mix,
-    build_time_series_growth,
-    build_winback_candidates,
-)
-from src.audit import (
-    audit_abc,
-    audit_abc_comissao,
-    audit_acionabilidade,
-    audit_calculadora,
-    audit_cohort,
-    audit_completude,
-    audit_demografia,
-    audit_margem_produto,
-    audit_margem_seg_produto,
-    audit_margem_seguradora,
-    audit_market_share,
-    audit_marketing,
-    audit_mix,
-    audit_origem_cadastro,
-    audit_origination,
-    audit_partner_count,
-    audit_portfolio_depth,
-    audit_producer,
-    audit_product_distribution,
-    audit_renovacoes,
-    audit_snapshot,
-    audit_status_situacao,
-    audit_winback,
-)
-from src.data_quality_advanced import (
-    build_dq_summary,
-    detect_commission_exceeds_premio,
-    detect_exact_duplicates,
-    detect_percentage_inconsistency,
-    detect_percentage_outliers,
-    detect_premio_outliers,
-    detect_zero_negative_premio,
-)
+from src.analytics import (build_abc_curve, build_abc_curve_comissao,
+                           build_cadastro_completeness,
+                           build_cancellation_rate,
+                           build_commission_margin_produto,
+                           build_commission_margin_seguradora_produto,
+                           build_cross_sell_matrix, build_demographics,
+                           build_monthly_active_snapshot,
+                           build_origination_sums, build_partner_performance,
+                           build_partner_performance_comissao,
+                           build_partner_share_by_count, build_portfolio_depth,
+                           build_producao_enriquecida,
+                           build_producer_performance,
+                           build_product_distribution, build_renewal_agenda,
+                           build_snapshot_grain, build_specialty_gaps,
+                           build_specialty_mix, build_time_series_growth,
+                           build_winback_candidates)
+from src.audit import (audit_abc, audit_abc_comissao, audit_acionabilidade,
+                       audit_calculadora, audit_cohort, audit_completude,
+                       audit_demografia, audit_margem_produto,
+                       audit_margem_seg_produto, audit_margem_seguradora,
+                       audit_market_share, audit_marketing, audit_mix,
+                       audit_origem_cadastro, audit_origination,
+                       audit_partner_count, audit_portfolio_depth,
+                       audit_producer, audit_product_distribution,
+                       audit_renovacoes, audit_snapshot, audit_status_situacao,
+                       audit_winback)
+from src.data_quality_advanced import (build_dq_summary,
+                                       detect_commission_exceeds_premio,
+                                       detect_exact_duplicates,
+                                       detect_percentage_inconsistency,
+                                       detect_percentage_outliers,
+                                       detect_premio_outliers,
+                                       detect_zero_negative_premio)
 from src.excel_report import export_formatted_workbook
-from src.functions import (
-    build_cycle_grain,
-    clean_cpf_cnpj,
-    flag_last_cycle,
-    generate_client_insights,
-    identify_root_conflicts,
-    prepare_demographics,
-)
+from src.functions import (build_cycle_grain, clean_cpf_cnpj, flag_last_cycle,
+                           generate_client_insights, identify_root_conflicts,
+                           prepare_demographics)
 from src.guardrails import build_run_context
-from src.marketing import (
-    build_acquisition_targets,
-    build_age_bands,
-    build_base_status,
-    build_birth_decade,
-    build_client_type_distribution,
-    build_marital_distribution,
-    build_marketing_base,
-    build_reachable_audience,
-    build_sex_distribution,
-    build_specialty_distribution,
-)
-from src.operacional import (
-    add_contact_flags,
-    build_active_with_cancellation,
-    build_contact_lookup,
-    build_contactability_by_producer,
-    build_origem_cadastro,
-    build_renewal_as_new,
-    build_situacao_ativa_vencida,
-    build_status_vs_situacao,
-)
+from src.marketing import (build_acquisition_targets, build_age_bands,
+                           build_base_status, build_birth_decade,
+                           build_client_type_distribution,
+                           build_marital_distribution, build_marketing_base,
+                           build_reachable_audience, build_sex_distribution,
+                           build_specialty_distribution)
+from src.operacional import (add_contact_flags, build_active_with_cancellation,
+                             build_contact_lookup,
+                             build_contactability_by_producer,
+                             build_origem_cadastro, build_renewal_as_new,
+                             build_situacao_ativa_vencida,
+                             build_status_vs_situacao)
 from src.parameters import PRODUCT_TYPE_MAP, normalize_producer
 from src.persistence import append_dq_history, export_parquet_tables
 from src.quality import run_full_audit
@@ -129,22 +88,22 @@ OPERACIONAL_DIR = OUTPUTS / "operacional"
 MARKETING_DIR = OUTPUTS / "marketing"
 
 # Track COMERCIAL
-COM_REPORT_FILE = COMERCIAL_DIR / "Comercial_RaioX.xlsx"
+COM_REPORT_FILE = COMERCIAL_DIR / "Comercial_Reports.xlsx"
 COM_VISUALS_DIR = COMERCIAL_DIR / "visuals"
 COM_PARQUET_DIR = COMERCIAL_DIR / "parquet"
 COM_AUDIT_DIR = COMERCIAL_DIR / "auditoria"
 
 # Track OPERACIONAL / QUALIDADE
-OPER_REPORT_FILE = OPERACIONAL_DIR / "Operacional_Qualidade_RaioX.xlsx"
-DQ_FILE = OPERACIONAL_DIR / "DQ_Raio_X_Cooperados.xlsx"
-CONFLICT_LOG_FILE = OPERACIONAL_DIR / "Log_Apolices_Conflito_RaioX.xlsx"
+OPER_REPORT_FILE = OPERACIONAL_DIR / "Operacional_Qualidade_Reports.xlsx"
+DQ_FILE = OPERACIONAL_DIR / "DQ_Reports.xlsx"
+CONFLICT_LOG_FILE = OPERACIONAL_DIR / "Log_Apolices_Conflito_Reports.xlsx"
 OPER_VISUALS_DIR = OPERACIONAL_DIR / "visuals"
 OPER_PARQUET_DIR = OPERACIONAL_DIR / "parquet"
 OPER_AUDIT_DIR = OPERACIONAL_DIR / "auditoria"
 DQ_HIST_FILE = OPERACIONAL_DIR / "dq_history.parquet"
 
 # Track MARKETING (base/mercado: cliente × prospect + demografia)
-MKT_REPORT_FILE = MARKETING_DIR / "Marketing_RaioX.xlsx"
+MKT_REPORT_FILE = MARKETING_DIR / "Marketing_Reports.xlsx"
 MKT_VISUALS_DIR = MARKETING_DIR / "visuals"
 MKT_PARQUET_DIR = MARKETING_DIR / "parquet"
 MKT_AUDIT_DIR = MARKETING_DIR / "auditoria"
@@ -782,7 +741,7 @@ def run_pipeline(force=False, input_dir=DATA_RAW):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Pipeline Raio X Cooperados.")
+    parser = argparse.ArgumentParser(description="Pipeline Reports Corretora.")
     parser.add_argument(
         "--force",
         action="store_true",

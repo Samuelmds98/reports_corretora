@@ -80,7 +80,7 @@ HTML_TEMPLATE = """
     </div>
     {audit_block}
   </div>
-  <div class="footer">Gerado em {timestamp} — Raio X Cooperados</div>
+  <div class="footer">Gerado em {timestamp} — Reports Corretora</div>
 </body>
 </html>
 """
@@ -146,7 +146,7 @@ INDEX_TEMPLATE = """
 <body>
   <div class="header"><h1>{title}</h1><p>{subtitle}</p></div>
   <div class="container"><div class="grid">{cards}</div></div>
-  <div class="footer">Gerado em {timestamp} — Raio X Cooperados</div>
+  <div class="footer">Gerado em {timestamp} — Reports Corretora</div>
 </body>
 </html>
 """
@@ -179,7 +179,7 @@ ROADMAP_TEMPLATE = """
 <body>
   <div class="header"><h1>{title}</h1><p>{subtitle}</p></div>
   <div class="container"><div class="grid">{cards}</div></div>
-  <div class="footer">Gerado em {timestamp} — Raio X Cooperados</div>
+  <div class="footer">Gerado em {timestamp} — Reports Corretora</div>
 </body>
 </html>
 """
@@ -1898,8 +1898,8 @@ def build_all_html_reports(
             "Prêmio zerado, comissão > prêmio, inconsistência %, outliers, duplicatas",
             lambda: _chart_dq_resumo(df_dq_resumo),
             (
-                "../DQ_Raio_X_Cooperados.xlsx",
-                "DQ_Raio_X_Cooperados.xlsx",
+                "../DQ_Reports.xlsx",
+                "DQ_Reports.xlsx",
                 "Todas as ocorrências, registro a registro por regra, em",
             ),
             "oper",
@@ -2021,17 +2021,17 @@ def build_all_html_reports(
     # Portais de navegação (índice) — um por público, consolidando seus HTMLs
     portais = {
         "com": (
-            "Painel Comercial — Raio X Cooperados",
+            "Painel Comercial — Reports Corretora",
             "Vendas · CRM · Margens",
             VERDE,
         ),
         "oper": (
-            "Painel Operacional / Qualidade — Raio X Cooperados",
+            "Painel Operacional / Qualidade — Reports Corretora",
             "Cadastro · Processo · Qualidade de dados",
             LARANJA,
         ),
         "mkt": (
-            "Painel Marketing — Raio X Cooperados",
+            "Painel Marketing — Reports Corretora",
             "Base · Prospects · Demografia",
             AZUL,
         ),
@@ -2058,7 +2058,7 @@ def build_all_html_reports(
             portal_cards.append((href, "PAINEL", titulo, sub))
         if portal_cards:
             html = _render_index(
-                "Raio X Cooperados — Índice Central",
+                "Reports Corretora — Índice Central",
                 "Escolha o painel: Comercial · Operacional/Qualidade · Marketing",
                 portal_cards,
                 AZUL,

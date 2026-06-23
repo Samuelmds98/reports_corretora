@@ -34,7 +34,7 @@ exporta um "data warehouse" local **segmentado em 3 públicos** (Excel + HTML + 
   - `outputs/comercial/` — vendas/CRM (ABC, cross-sell, market share, renovações, win-back,
     margens incl. seguradora×produto, performance de produtor, snapshot).
   - `outputs/operacional/` — qualidade de cadastro/processo (completude, status×situação,
-    DQ1/DQ2/DQ3, acionabilidade, testes de DQ) + `DQ_Raio_X_Cooperados.xlsx`.
+    DQ1/DQ2/DQ3, acionabilidade, testes de DQ) + `DQ_Reports.xlsx`.
   - `outputs/marketing/` — base inteira: **cliente × prospect** + demografia + acionabilidade
     (status da base, especialidade, década, faixa etária, histograma de idade, **alvos de
     aquisição**, **audiência de campanha**, **personas** sexo/estado civil/tipo, roadmap de

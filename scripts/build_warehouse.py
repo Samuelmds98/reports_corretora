@@ -8,13 +8,14 @@ mudar o pipeline. As tabelas são VIEWS que leem os Parquet — regenerou o pipe
 warehouse reflete na hora.
 
 Uso:
-    python scripts/build_warehouse.py            # (re)constrói outputs/raio_x.duckdb + demo
+    python scripts/build_warehouse.py            # (re)constrói outputs/reports.duckdb + demo
     python scripts/build_warehouse.py --sql "SELECT ..."   # roda uma consulta ad-hoc
 
 Esquemas criados:
     comercial.*   — uma view por Parquet de outputs/comercial/parquet
     operacional.* — uma view por Parquet de outputs/operacional/parquet
-    gold.*        — exemplos de visões de valor (cruzam os dois públicos)
+    marketing.*   — uma view por Parquet de outputs/marketing/parquet
+    gold.*        — exemplos de visões de valor (cruzam os públicos)
 """
 
 import argparse
@@ -23,7 +24,7 @@ from pathlib import Path
 import duckdb
 
 ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = ROOT / "outputs" / "raio_x.duckdb"
+DB_PATH = ROOT / "outputs" / "reports.duckdb"
 
 
 def _connect():

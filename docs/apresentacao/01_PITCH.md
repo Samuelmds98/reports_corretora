@@ -1,4 +1,4 @@
-# Raio X Cooperados — Pitch
+# Reports Corretora — Pitch
 
 > Documento executivo (1 página) para apresentação. Problema de negócio + solução proposta.
 
@@ -64,8 +64,7 @@ Enquanto os valores não são saneados, o foco é a **abordagem qualitativa/não
 - **Comercial:** priorizar renovações por urgência e valor; reativar inativos; achar
   cross-sell por especialidade; identificar produto/parceiro de alta margem; ler a
   performance e a retenção da força de vendas.
-- **Operacional:** uma lista concreta de **220 apólices com status defasado**, **9
-  prováveis renovações mal cadastradas**, **108 registros em regras críticas de DQ** —
+- **Operacional:** uma lista concreta de **apólices com status defasado**, **prováveis renovações mal cadastradas**, **registros em regras críticas de DQ** —
   trabalho de saneamento priorizado, não achismo.
 - **Marketing:** enxergar os **prospects** (a maioria invisível ao Comercial) e
   transformá-los em campanha — alvos de aquisição por especialidade com o produto de

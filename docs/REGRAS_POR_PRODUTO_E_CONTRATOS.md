@@ -2,7 +2,7 @@
 
 > Como documentar regras de negócio que **mudam por produto** (vigência, ativo, qual
 > valor somar) e como formalizar o que cada arquivo de entrada precisa entregar
-> (contrato de dados). Escrito para o "Raio X Cooperados", mas o padrão serve para o TCC.
+> (contrato de dados). Escrito para o "Reports Corretora", mas o padrão serve para o TCC.
 
 ## 1. O problema
 

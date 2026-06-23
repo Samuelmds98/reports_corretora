@@ -1,6 +1,6 @@
 # Evolução para Plataforma de Inteligência de Dados / Negócios
 
-> Avaliação do estado atual + **roadmap** de evolução do "Raio X Cooperados" de pipeline
+> Avaliação do estado atual + **roadmap** de evolução do "Reports Corretora" de pipeline
 > local para uma **plataforma de inteligência de dados** da corretora. Incorpora as quatro
 > decisões já tomadas (ingestão via banco/API, Power BI, Streamlit, automação de e-mail de
 > qualidade) e avalia evoluções arquiteturais e de produto adicionais. Arquitetura atual em

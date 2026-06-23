@@ -1,8 +1,7 @@
-# Raio X Cooperados — Vínculo com o MBA em Gestão de BI
+# Reports Corretora — Vínculo com o MBA em Gestão de BI
 
 > Como o projeto evidencia, na prática, as competências de um **MBA em Gestão de
-> Business Intelligence**. Estrutura sugerida para apresentar ao coordenador: cada
-> disciplina/competência do curso mapeada ao que o projeto entrega como prova.
+> Business Intelligence**.
 
 ## Tese central
 
@@ -43,7 +42,7 @@ modelagem → métricas → consumo → governança → estratégia. Esse é exa
    o roadmap mostra a visão de maturidade (orquestração, app, contratos) — decisões de
    *gestão* (o que fazer agora vs. antes de produção, e por quê).
 
-## Por que esta é uma boa tese de Gestão de BI (e não só de Ciência de Dados)
+## Por que esta é uma boa tese de Gestão de BI?
 
 - O foco não é um modelo preditivo, e sim o **sistema de informação que sustenta a
   decisão**: qualidade, governança, métricas, públicos e maturidade.
@@ -51,15 +50,3 @@ modelagem → métricas → consumo → governança → estratégia. Esse é exa
   públicos, manter monolito, remover a aba de conferência, evoluir por incremento.
 - Conecta **dado → métrica → decisão → ação** no contexto de um negócio real, que é a
   promessa central do BI.
-
----
-
-### Sugestões de variação para o 3º documento (escolha do autor)
-
-- **(A) Este formato** — mapeamento competências do MBA × evidências (recomendado: mostra
-  domínio amplo da disciplina).
-- **(B) Estudo de caso** — formato acadêmico (problema, metodologia, resultados, limitações,
-  trabalhos futuros), útil se a banca espera estrutura de artigo.
-- **(C) Roadmap de maturidade de BI** — posicionar o projeto num modelo de maturidade
-  analítica (descritivo → diagnóstico → preditivo → prescritivo) e mostrar onde está e para
-  onde vai. Bom para destacar a visão estratégica.

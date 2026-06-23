@@ -718,7 +718,7 @@ def build_commission_margin_seguradora_produto(df_prod_status):
     )
 
 
-# ── Raio X Qualitativo: análises NÃO-MONETÁRIAS (sem prêmio/comissão) ──────────
+# ── Análises NÃO-MONETÁRIAS / qualitativas (sem prêmio/comissão) ──────────────
 def build_cadastro_completeness(df_cad_raw, df_prod):
     """
     Diagnóstico de qualidade do cadastro: % de preenchimento e cardinalidade por

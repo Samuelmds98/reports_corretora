@@ -1,7 +1,7 @@
 """
 parameters.py
 
-Dicionários de mapeamento para o motor de rating "Raio X Médicos".
+Dicionários de mapeamento para o motor de rating "Reports Corretora".
 """
 
 # Mapeamento do "NOME ABREVIADO DO PRODUTO" para "TIPO DE VIGÊNCIA"

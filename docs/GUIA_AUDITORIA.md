@@ -92,7 +92,7 @@ Toda linha da aba **2_Lastro** começa com:
 
 - **"Esse número parece alto/errado."** Abra o lastro, filtre pela chave e procure
   registros estranhos (prêmio fora do padrão, duplicatas, datas erradas). Cruze com
-  o arquivo `DQ_Raio_X_Cooperados.xlsx`, que isola anomalias (prêmio zerado,
+  o arquivo `DQ_Reports.xlsx`, que isola anomalias (prêmio zerado,
   comissão > prêmio, duplicatas, outliers).
 - **"Apareceu um CPF que não conheço."** Veja `ARQUIVO_ORIGEM`/`LINHA_ORIGEM` —
   se vier de produção mas não existir no cadastro, é um **órfão** (o `DQ` sinaliza
