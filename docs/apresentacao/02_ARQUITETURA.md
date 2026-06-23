@@ -1,7 +1,6 @@
-# Raio X Cooperados — Arquitetura da Solução
+# Reports Corretora — Arquitetura da Solução
 
-> Documentação técnica resumida da arquitetura, para apresentação. Detalhes operacionais
-> em `CLAUDE.md`; histórico em `docs/CHANGELOG.md`; evolução em `docs/EVOLUCAO_PLATAFORMA.md`.
+> Documentação técnica resumida da arquitetura, histórico em `docs/CHANGELOG.md`; evolução em `docs/EVOLUCAO_PLATAFORMA.md`.
 
 ## 1. Visão geral do fluxo
 
@@ -79,7 +78,7 @@
 - **Python + pandas** (motor e builders), **NumPy**.
 - **openpyxl** (Excel formatado), **Plotly** (HTML interativo), **PyArrow/Parquet** (BI).
 - **DuckDB** (camada de consulta analítica embutida).
-- **Power BI** consome os Parquet (guia de reconstrução em `docs/GUIA_IMPLEMENTACAO_POWERBI.md`).
+- **Power BI** consome os Parquet (guia de reconstrução será escrito após finalizar o projeto).
 - **black/isort** (padronização), `data/exemplo/` anonimizado para apresentação sem expor dados.
 
 ## 6. Decisões de arquitetura (e o porquê)

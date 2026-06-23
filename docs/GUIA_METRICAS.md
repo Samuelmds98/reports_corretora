@@ -257,7 +257,7 @@ CPFs ativos distintos na especialidade`; `PENETRACAO_PCT = qtd / total × 100`.
 **Impactos de dados ruins:**
 - Depende do cruzamento produção × cadastro: **CPF órfão** entra como especialidade
   "Não Informado" e some das especialidades reais.
-- Sensível à **inconsistência de acento** entre as bases (ver Power BI): produção usa
+- Sensível à **inconsistência de acento** entre as bases: produção usa
   `CARACTERISTICA` (sem acento) e cadastro `CARACTERÍSTICA` (com acento) — aqui vale a
   do cadastro.
 
@@ -417,7 +417,7 @@ Visual: dispersão prêmio × taxa efetiva (bolha = comissão) em `12_margem_com
   o efeito de uma linha isolada, mas grupos pequenos ficam sensíveis — no grão
   seguradora×produto há mais células pequenas, leia a taxa junto de `QTD_ITENS`.
 - Comissão usa a coluna **`COMISSÃO`** (não a `COMISSÃO TOTAL...`); divergência entre as
-  duas afeta o número (ver `GUIA_IMPLEMENTACAO_POWERBI.md`).
+  duas afeta o número (fonte única em `get_comissao_col`).
 - Nome de seguradora/produto inconsistente fragmenta a célula (mesma ressalva do Market Share).
 
 ---
@@ -450,8 +450,7 @@ Arquivo `DQ_Raio_X_Cooperados.xlsx` — **só sinaliza, nunca corrige**. Regras:
 | Seguradora com nome inconsistente | Market Share | share fragmentado | inspeção do lastro |
 | Cadastro filtrado por categoria | Demografia, Mix, Conversão | população descasada; órfãos altos | guardrail (taxa de órfãos) |
 | Janela por `INÍCIO DE VIGÊNCIA` (2024+) | Cohort, Snapshot, somas, Win-Back | 1ª safra inflada; somas da janela | guardrail (janela), `run_context` |
-| Acento `CARACTERISTICA`/`CARACTERÍSTICA` | Mix, Demografia | join falha entre bases | ver `GUIA_IMPLEMENTACAO_POWERBI.md` |
+| Acento `CARACTERISTICA`/`CARACTERÍSTICA` | Mix, Demografia | join falha entre bases | inspeção do cruzamento (vale o do cadastro) |
 | Comissão errada / coluna trocada | ABC Comissão, Margem, Market Share Comissão | taxa efetiva e ranking de margem distorcidos | `DQ` (comissão > prêmio, inconsistência %) |
 
 > Para **conferir** qualquer um desses números registro a registro, use o `GUIA_AUDITORIA.md`.
-> Para **reconstruir** as métricas no Power BI, use o `GUIA_IMPLEMENTACAO_POWERBI.md`.

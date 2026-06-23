@@ -5,6 +5,21 @@ Ordenado do mais recente para o mais antigo.
 
 ---
 
+## [Enxugamento da documentação] — Feito ✓
+
+Remoção de docs redundantes/defasados e correção de referências:
+- **Removidos:** `GUIA_IMPLEMENTACAO_POWERBI.md` (o guia de Power BI será reescrito após
+  finalizar o projeto), `Definição de Arquitetura e Regras de Negócio.md` (redundante com
+  `ARCHITECTURE.md` + `REGRAS_POR_PRODUTO_E_CONTRATOS.md` + `CLAUDE.md`), e os internos
+  `ANALISES_NAO_MONETARIAS.md` + `ARTEFATOS_TCC.md` (planejamento já implementado).
+- **Corrigidos:** `GUIA_AUDITORIA.md` (3 abas/Conferência → 2 abas Agregado|Lastro, caminhos
+  per-track), `GUIA_METRICAS_QUALITATIVAS.md` (caminhos `Raio_X_Qualitativo`/`qual_*` → abas
+  reais dos tracks comercial/operacional), e referências cruzadas em `GUIA_METRICAS.md`,
+  `REGRAS_POR_PRODUTO_E_CONTRATOS.md`, `EVOLUCAO_PLATAFORMA.md`, `CLAUDE.md`,
+  `apresentacao/02_ARQUITETURA.md`, `interno/DATA_DISCOVERY.md`.
+
+---
+
 ## [Marketing — campanhas acionáveis, audiência, personas e roadmap (TODO 1–4)] — Implementado ✓
 
 Expansão do track Marketing com os 4 itens do `TODO.md`, todos não-monetários:

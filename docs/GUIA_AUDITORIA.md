@@ -1,7 +1,7 @@
 # Guia de Auditoria — Como rastrear qualquer número até a origem
 
-> Para o usuário final. Não é necessário saber programar nem Power BI.
-> Tudo é feito abrindo arquivos Excel da pasta `outputs/auditoria/`.
+> Para o usuário final. Não é necessário saber programar.
+> Tudo é feito abrindo arquivos Excel das pastas `outputs/<público>/auditoria/`.
 
 ---
 
@@ -9,19 +9,22 @@
 
 **Todo número de qualquer relatório pode ser explicado, registro por registro, até a
 linha exata do Excel de origem.** Para isso, cada análise tem um arquivo de auditoria
-próprio em `outputs/auditoria/`.
+próprio na pasta `auditoria/` do seu público (`comercial/`, `operacional/`, `marketing/`).
 
 ---
 
 ## 2. Anatomia de um workbook de auditoria
 
-Cada `.xlsx` em `outputs/auditoria/` tem **3 abas**:
+Cada `.xlsx` de auditoria tem **2 abas**:
 
 | Aba | O que é | Para que serve |
 |---|---|---|
 | **1_Agregado** | Os números (igual ao que aparece no relatório principal). | Ponto de partida: escolha a linha/número que quer conferir. |
 | **2_Lastro** | **Todos** os registros de origem que alimentam aqueles números. | A prova: aqui estão as linhas que foram somadas/contadas. |
-| **3_Conferencia** | Re-soma o lastro e compara com o agregado, linha a linha. | A garantia: mostra se cada número **fecha** (nada vazou). |
+
+> O fechamento "soma do lastro == número agregado" é verificado automaticamente a cada
+> execução: o pipeline re-agrega o lastro por um caminho independente e **só avisa no
+> console se algo não fechar**. O artefato entregue fica enxuto (Agregado | Lastro).
 
 ### A âncora de origem (as 3 primeiras colunas do Lastro)
 
@@ -41,7 +44,7 @@ Toda linha da aba **2_Lastro** começa com:
 ## 3. Receita de bolo: "quero conferir este número"
 
 1. **Identifique a análise** (ex: Curva ABC, Market Share, Cohort...).
-2. **Abra o workbook** correspondente em `outputs/auditoria/` (ver tabela na seção 4).
+2. **Abra o workbook** correspondente na pasta `auditoria/` do público (ver tabela na seção 4).
 3. Na aba **1_Agregado**, localize a linha do número que quer conferir e anote a
    **chave** dela (ex: o `CPF_LIMPO`, a `SEGURADORA`, a `SAFRA_MES_VIGENCIA`...).
 4. Vá para a aba **2_Lastro** e **filtre** por essa chave (Dados → Filtro no Excel).
@@ -58,6 +61,12 @@ Toda linha da aba **2_Lastro** começa com:
 ---
 
 ## 4. Mapa: análise → workbook → chave de filtro
+
+> Os workbooks abaixo ficam em **`outputs/comercial/auditoria/`**. Os tracks
+> **Operacional/Qualidade** (`outputs/operacional/auditoria/`) e **Marketing**
+> (`outputs/marketing/auditoria/`) seguem o mesmo padrão Agregado | Lastro — ex.:
+> `Alvos_Aquisicao.xlsx`/`Audiencia_Campanha.xlsx` (lastro = prospects),
+> `Personas_*.xlsx` e `Status_Base.xlsx` (lastro = base por cooperado).
 
 | Análise | Workbook | Filtre o Lastro por | Confere |
 |---|---|---|---|
@@ -79,26 +88,7 @@ Toda linha da aba **2_Lastro** começa com:
 
 ---
 
-## 5. Como ler a aba 3_Conferencia
-
-Cada linha compara o agregado com a re-soma do lastro:
-
-| Coluna | Significado |
-|---|---|
-| (chave) | A linha agregada conferida (CPF, seguradora, safra, célula...). |
-| `METRICA` | Qual número está sendo conferido. |
-| `VALOR_AGREGADO` | O número que aparece no relatório. |
-| `VALOR_LASTRO` | A re-soma dos registros de origem. |
-| `DIFERENCA` | `VALOR_AGREGADO − VALOR_LASTRO`. |
-| `CONFERE` | `VERDADEIRO` se a diferença é desprezível (< 0,01). |
-
-As linhas vêm **ordenadas com as divergências no topo**. Se tudo estiver `CONFERE =
-VERDADEIRO`, o número é 100% explicado pelo lastro. Hoje, **todas as análises fecham
-com zero divergências**.
-
----
-
-## 6. Situações comuns de auditoria
+## 5. Situações comuns de auditoria
 
 - **"Esse número parece alto/errado."** Abra o lastro, filtre pela chave e procure
   registros estranhos (prêmio fora do padrão, duplicatas, datas erradas). Cruze com
@@ -116,7 +106,7 @@ com zero divergências**.
 
 ---
 
-## 7. Avisos importantes
+## 6. Avisos importantes
 
 - Os workbooks são **regerados a cada execução** do pipeline (`python Main.py`).
   Se um deles estiver **aberto no Excel** na hora de rodar, ele é **pulado com aviso**

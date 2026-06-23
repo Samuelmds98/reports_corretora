@@ -194,6 +194,6 @@ observacoes:
 ## Relacionados
 
 - `docs/GUIA_METRICAS.md` — §12 Agenda de Renovações (uso de `PREMIO_ULTIMO_CICLO`).
-- `docs/Definição de Arquitetura e Regras de Negócio.md` — regras completas de vigência.
+- `CLAUDE.md` / `ARCHITECTURE.md` — regras de status/rating/vigência e arquitetura.
 - `src/parameters.py` — `PRODUCT_TYPE_MAP` (fonte de verdade: `Página1.html`).
 - `src/guardrails.py`, `src/data_quality_advanced.py` — onde o enforce já mora.
