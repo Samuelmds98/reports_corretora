@@ -112,17 +112,20 @@ uma **API que a engenharia de dados vai construir**.
 - *Reaproveita:* `outputs/*/parquet/*`. *Dependências:* nenhuma técnica (pode começar já);
   idealmente após Fase 5 para não retrabalhar as medidas.
 
-### Fase 3 — App interativo em Streamlit (substitui os HTMLs estáticos) · esforço: médio
-**Objetivo:** transformar os portais/HTMLs em um **app Streamlit** interativo.
-- Lê do **DuckDB** (camada de consulta já existente); **3 páginas** espelhando os tracks
-  (Comercial · Operacional/Qualidade · Marketing) + página **"Saúde do Pipeline"**
-  (`run_context`, tendência de `dq_history`).
-- **Filtros e drill-down** (período, especialidade, produtor, seguradora) — o que o HTML
-  estático não faz; embute os gráficos Plotly já construídos em `report_html._chart_*`
-  (viram componentes) e linka os workbooks de auditoria.
-- Mantém o princípio de rastreabilidade: cada visão com link para o lastro.
-- *Reaproveita:* `report_html._chart_*`, DuckDB, Parquet, os builders. *Dependências:* DuckDB
-  (feito); ganha muito com a Fase 1 (dados sempre frescos) e a Fase 5 (métrica única).
+### Fase 3 — App interativo em Streamlit (ADITIVO aos HTMLs) · ✅ v1 feito
+**Objetivo:** uma camada de consumo interativa para o **TCC**, **sem** parar de gerar os
+arquivos locais (HTML/XLSX) que o trabalho precisa salvos na rede. O Streamlit é um
+**consumidor paralelo** dos mesmos Parquet — `Main.py` segue inalterado.
+- **`app/`** multipage (`Home.py` + `pages/1_Comercial`, `2_Operacional`, `3_Marketing`,
+  `4_Saude_Pipeline`). Lê os Parquet de `outputs/*/parquet/` (loader cacheado em `app/lib/`).
+- **Reuso sem drift:** `app/lib/registry.py` importa os `_chart_*` de `report_html.py` (sem
+  tocá-los) → app e HTML mostram o **mesmo** gráfico/insight. As 27 visões + página de Saúde
+  (`run_context` + `dq_history`); cada visão oferece download do workbook de auditoria.
+- Rodar: `streamlit run app/Home.py` (após um `python Main.py`). Validado com `data/exemplo`.
+- **Pendente (v2):** filtros cross-cutting (período/especialidade/produtor) e deploy em
+  Streamlit Community Cloud para a banca (geraria os dados de `data/exemplo` no startup).
+- *Reaproveita:* `report_html._chart_*`, Parquet. *Dependências:* nenhuma (DuckDB opcional);
+  ganha com a Fase 1 (dados frescos) e a Fase 5 (métrica única).
 
 ### Fase 4 — Automação e notificação de qualidade ao backoffice · esforço: baixo–médio
 **Objetivo:** rodar o pipeline em **agenda** e **notificar o backoffice por e-mail** sobre

@@ -37,6 +37,17 @@
   · Renda/porte real (hoje `RENDA`/`PROFISSÃO` são lixo) · Share of wallet externo ·
   NPS/indicação. Pode ser um HTML estático (cards) no padrão dos portais, sem builder de dados.
 
+## Dívida técnica / bugs conhecidos
+
+- [ ] **Warehouse (`scripts/build_warehouse.py`) — views `gold.*` quebradas + schema
+  marketing ausente no sumário.** Ao rodar `python scripts/build_warehouse.py`, as views
+  `gold.kpis` e `gold.qualidade_resumo` são puladas com `Catalog Error: Table with name
+  renovacao_como_novo does not exist` — o SQL da view referencia a tabela sem qualificar o
+  schema (`operacional.renovacao_como_novo`). Além disso, o `marketing.*` é criado mas não
+  aparece na string de sumário final (`schemas comercial / operacional / gold`). Corrigir o
+  schema-qualify das views gold e incluir `marketing` no sumário. (Pré-existente; detectado
+  ao regenerar o warehouse no rebrand.)
+
 ## Notas para quem continuar
 - Confiabilidade de valores monetários é baixa → manter foco **não-monetário** (contagens/datas).
 - 68% da base são **prospects** (invisíveis ao Comercial, que é grão de produção) — é o

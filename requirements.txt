@@ -9,6 +9,9 @@ pyarrow>=14.0.0      # persistência em Parquet (Power BI)
 # Camada de consulta / warehouse (MVP de plataforma — ver docs/EVOLUCAO_PLATAFORMA.md)
 duckdb>=1.0.0        # banco analítico embutido; SQL sobre os Parquet (camada única)
 
+# App interativo (Fase 3 — consumo p/ TCC; não substitui a geração de HTML/XLSX locais)
+streamlit>=1.40.0    # painel multipage lendo os Parquet; reusa os _chart_* de report_html
+
 # Visualização
 matplotlib>=3.8.0
 seaborn>=0.13.0

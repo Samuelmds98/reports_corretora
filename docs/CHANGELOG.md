@@ -5,6 +5,23 @@ Ordenado do mais recente para o mais antigo.
 
 ---
 
+## [App interativo Streamlit (Fase 3 — aditivo)] — v1 Feito ✓
+
+Camada de consumo interativa para o TCC, **sem** parar a geração de HTML/XLSX locais
+(o trabalho precisa dos arquivos na rede). Streamlit é consumidor paralelo dos mesmos Parquet.
+
+- **`app/`** multipage: `Home.py` + `pages/{1_Comercial,2_Operacional,3_Marketing,4_Saude_Pipeline}.py`.
+- **`app/lib/`**: `data.py` (loader de Parquet cacheado + resumo DQ via aba do `DQ_Reports.xlsx`),
+  `registry.py` (as 27 visões, **importando os `_chart_*` de `report_html.py`** — fonte única
+  de gráfico/insight, sem drift; decisão D1=A: report_html intacto), `render.py` (gráfico +
+  insights + recomendações + download do workbook de auditoria).
+- Página **"Saúde do Pipeline"**: `run_context` (guardrails) + tendência de `dq_history`.
+- `Main.py`/`report_html.py` **inalterados**. Rodar: `streamlit run app/Home.py`.
+- Validado: smoke test (27/27 visões renderizam) + boot do servidor + screenshots (home + Curva ABC).
+- v2 pendente: filtros cross-cutting + deploy em Streamlit Community Cloud.
+
+---
+
 ## [Enxugamento da documentação] — Feito ✓
 
 Remoção de docs redundantes/defasados e correção de referências:

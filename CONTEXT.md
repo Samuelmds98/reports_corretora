@@ -19,6 +19,8 @@ exporta um "data warehouse" local **segmentado em 3 públicos** (Excel + HTML + 
 - Venv em `.venv` → usar `.venv/Scripts/python.exe`.
 - Rodar: `python Main.py [--input-dir data/exemplo] [--force]`. Idempotente por hash do input.
 - Warehouse: `python scripts/build_warehouse.py` (DuckDB sobre os Parquet).
+- App interativo (Fase 3, aditivo — TCC): `streamlit run app/Home.py` (após um `Main.py`).
+  Lê os Parquet e reusa os `_chart_*`; não substitui a geração local de HTML/XLSX.
 
 ## ⚠️ PROTOCOLO DE SEGURANÇA (crítico — já houve 1 vazamento)
 - `data/raw/` = **dados REAIS de clientes** (CPF, nomes). **NUNCA versionar** (gitignored).
