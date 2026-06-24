@@ -30,3 +30,4 @@ tqdm>=4.66.0          # barras de progresso
 # Qualidade / Reprodutibilidade
 black>=24.0.0         # formatação de código
 isort>=5.13.0         # ordenação de imports
+pytest>=8.0.0         # testes do motor de regras (tests/)

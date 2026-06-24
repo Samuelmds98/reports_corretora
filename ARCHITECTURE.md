@@ -85,3 +85,42 @@ propensão), seria uma evolução futura — hoje **não** existe e não está n
 3. Aba no workbook + tabela no Parquet em `Main.py`.
 4. `audit_*` (Agregado|Lastro) roteado para o `*_AUDIT_DIR` do público.
 5. Formatar (`black`/`isort`) e rodar com `--input-dir data/exemplo --force`.
+
+## 5. Camadas de dados e enquadramento arquitetural (medallion / *lakehouse-lite*)
+
+> Dois eixos **ortogonais**, que não devem ser confundidos: **arquitetura de armazenamento**
+> (onde/como o dado mora — *data lake* / *data warehouse* / *lakehouse*) e **modelagem**
+> (formato das tabelas — *flat* / normalizado / dimensional). Usar tabelas *flat* é decisão
+> de modelagem, **não** caracteriza um *data lake*.
+
+### 5.1 Camadas (medallion)
+O pipeline materializa, conceitualmente, as três zonas do padrão *medallion*:
+- **Bronze** — linhas brutas atômicas com âncora de origem (`producao_grain`,
+  `ID_LINHA`/`ARQUIVO_ORIGEM`/`LINHA_ORIGEM`).
+- **Silver** — saneado/conformado: `df_prod_status` (grão produto×cooperado), grão de ciclo,
+  flags de último ciclo/contato.
+- **Gold** — *marts* por público (as visões comerciais, operacionais e de marketing) +
+  `producao_enriquecida` (fato denormalizado para BI).
+
+### 5.2 Enquadramento: *lakehouse-lite* local (não é *data lake*, não é *lakehouse* pleno)
+A solução grava em **Parquet** (formato aberto, colunar) consultado por **DuckDB** (engine
+SQL **desacoplada** do storage), com **linhagem** ponta a ponta. Isso é um **lakehouse-lite
+local**: formato aberto + SQL + linhagem sobre camadas medallion. Mas **Parquet sozinho não
+faz um lake nem um lakehouse**:
+- **Não é *data lake*:** sem *object storage*, sem zona *raw* multiformato, sem catálogo,
+  carga única (sem acúmulo histórico além do `dq_history`).
+- **Não é *lakehouse* pleno:** falta o item que define um lakehouse — uma **table format
+  transacional** (Delta Lake / Apache Iceberg / Apache Hudi) que adicione **ACID**,
+  ***time travel*** (histórico/SCD) e **MERGE** sobre os Parquet. Hoje os Parquet são
+  arquivos sobrescritos a cada execução.
+
+### 5.3 Decisão (simplicidade) e evolução mínima
+Dado o volume (~5k linhas) e o objetivo de POC/TCC, **não** se adota Spark, *object storage*
+ou cluster — seria desproporcional. A evolução para *lakehouse* pleno (adotar **uma** table
+format em **um** mart, como PoC de ACID/*time travel*) é tratada como **trabalho futuro
+opcional** — ver `docs/EVOLUCAO_PLATAFORMA.md`. A modelagem dimensional (*star schema*
+conceitual) está em `docs/MODELAGEM_DIMENSIONAL.md`; o dicionário de dados em
+`docs/DICIONARIO_DE_DADOS.md`.
+
+> Referência: ARMBRUST, M. et al. *Lakehouse: A New Generation of Open Platforms…*, CIDR
+> 2021; arquitetura *medallion* (Databricks).
