@@ -1,14 +1,16 @@
 # Reports Corretora
 
-> Motor de **analytics e inteligência de dados** (Python/pandas) para uma corretora de
-> seguros de **cooperados médicos**. Lê dois relatórios Excel brutos, aplica saneamento e
-> regras de negócio, calcula *status* e *rating* por cliente e exporta um "data warehouse
-> local" **segmentado em 3 públicos** (Excel + HTML interativo + Parquet), com **camada de
-> consulta DuckDB** e **app interativo Streamlit**.
+> Motor de **analytics e inteligência de dados** (Python/pandas) para uma **corretora de
+> seguros que atende o público geral** (pessoas físicas e jurídicas). Lê dois relatórios
+> Excel brutos, aplica saneamento e regras de negócio, calcula *status* e *rating* por
+> cliente e exporta um "data warehouse local" **segmentado em 3 públicos** (Excel + HTML
+> interativo + Parquet), com **camada de consulta DuckDB** e **app interativo Streamlit**.
 
-Projeto de **TCC (MBA em Gestão de BI)** + ferramenta real de trabalho. Foco atual em
-métricas **não-monetárias** (a confiabilidade dos valores prêmio/comissão na base real é
-baixa — saneamento é uma 2ª fase).
+Projeto de **TCC (MBA em Gestão de BI)** + ferramenta real de trabalho. A base usada na
+análise é um **recorte de um público específico (cooperados médicos)** — delimitação do
+estudo de caso, não a natureza da corretora; o motor e a modelagem são genéricos para
+qualquer público. Foco atual em métricas **não-monetárias** (a confiabilidade dos valores
+prêmio/comissão na base real é baixa — saneamento é uma 2ª fase).
 
 ---
 

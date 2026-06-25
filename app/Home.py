@@ -24,7 +24,7 @@ st.set_page_config(page_title="Reports Corretora", page_icon="📊", layout="wid
 st.title("📊 Reports Corretora")
 st.markdown(
     "Plataforma de **reports / inteligência de dados** de uma corretora de seguros "
-    "de cooperados médicos. Esta é a camada de consumo interativa — os mesmos números, "
+    "(público geral, PF/PJ). Esta é a camada de consumo interativa — os mesmos números, "
     "gráficos e recomendações dos relatórios locais, agora navegáveis."
 )
 

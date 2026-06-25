@@ -5,9 +5,11 @@
 > `ARCHITECTURE.md`. Próximos passos em `TODO.md`.
 
 ## O que é
-Motor de analytics (Python/pandas) para uma corretora de seguros de **cooperados médicos**.
-Lê 2 Excel brutos, saneia, aplica regras de negócio, calcula status/rating por cliente e
-exporta um "data warehouse" local **segmentado em 3 públicos** (Excel + HTML + Parquet).
+Motor de analytics (Python/pandas) para uma corretora de seguros que atende o **público
+geral** (PF/PJ). Lê 2 Excel brutos, saneia, aplica regras de negócio, calcula status/rating
+por cliente e exporta um "data warehouse" local **segmentado em 3 públicos** (Excel + HTML +
+Parquet). A base analisada é um **recorte específico (cooperados médicos)** — delimitação do
+estudo de caso, não a natureza da corretora.
 
 - Nome do projeto: **reports_corretora**. Pasta local: `raio_x_cooperados`.
   GitHub: `https://github.com/Samuelmds98/reports_corretora`.
