@@ -68,5 +68,5 @@ with c4:
 st.divider()
 st.caption(
     "Rastreabilidade: cada visão linka o workbook de auditoria (Agregado | Lastro) com os "
-    "registros de origem. Dados de exemplo são fictícios (anonimizados)."
+    "registros de origem. Dados de exemplo são fictícios (sintéticos, não dados reais)."
 )

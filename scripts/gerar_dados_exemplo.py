@@ -1,8 +1,10 @@
 """
 gerar_dados_exemplo.py
 
-Gera uma cópia ANONIMIZADA e RANDOMIZADA dos dois Excel de origem, com a MESMA
-estrutura de colunas, para uso em apresentação/TCC (sem expor dados reais).
+Gera uma base de exemplo SINTÉTICA (fictícia) com a MESMA estrutura de colunas dos
+dois Excel de origem, para uso em apresentação/TCC (sem expor dados reais). NÃO é
+anonimização (que partiria de dados reais): os registros são INVENTADOS — não pertencem
+a nenhum titular real, logo não constituem dado pessoal (fora do escopo da LGPD).
 
 - Dados qualitativos (nomes, CPFs, e-mails, telefones, endereços) são fictícios.
 - Dados quantitativos (prêmio, comissão, %, datas, parcelas) são aleatórios.

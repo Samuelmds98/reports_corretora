@@ -54,7 +54,7 @@ python -m venv .venv
 # source .venv/bin/activate
 pip install -r requirements.txt
 
-# 3. Rodar o pipeline sobre a BASE DE EXEMPLO (anonimizada, já versionada)
+# 3. Rodar o pipeline sobre a BASE DE EXEMPLO (sintética/fictícia, já versionada)
 python Main.py --input-dir data/exemplo --force
 
 # 4. (opcional) Camada de consulta SQL — DuckDB sobre os Parquet

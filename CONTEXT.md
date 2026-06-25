@@ -30,7 +30,8 @@ estudo de caso, não a natureza da corretora.
 - `*.pptx`, `.claude/`, `CLAUDE.md` → gitignored.
 - `outputs/` versiona **apenas `*.html` e `*.xlsx`** (regra seletiva no `.gitignore`).
 - **Publicar no GitHub SÓ a partir de uma rodada com `data/exemplo`** (base fictícia
-  anonimizada). O histórico git foi recriado do zero uma vez para apagar o commit contaminado.
+  **sintética**, não anonimização de dado real). O histórico git foi recriado do zero uma
+  vez para apagar o commit contaminado.
 
 ## Estado atual (o que já foi feito)
 - **3 tracks segmentados por público**, cada um com workbook + `visuals/` (HTML) + `parquet/`
