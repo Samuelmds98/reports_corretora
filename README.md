@@ -99,15 +99,14 @@ data (Excel/visão) → load + carimbo de origem (ID_LINHA) → saneamento (CPF,
        → DuckDB (SQL ad-hoc)   → Streamlit (app)   → Power BI (futuro, via Parquet)
 ```
 
-O pipeline é **monolítico e idempotente** (volume ~5k linhas). Detalhes em
+O pipeline é **monolítico e idempotente**. Detalhes em
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## 🔒 Segurança e privacidade (LGPD)
 
-- `data/raw/` (CPF, nomes reais) e `notebooks/` (com outputs reais) **nunca** são
-  versionados — regra seletiva no `.gitignore`.
+- `data/raw/` (CPF, nomes reais) **nunca** são
+  versionados, regra seletiva no `.gitignore`.
 - `outputs/` versiona **apenas** `*.html` e `*.xlsx` **gerados da base de exemplo**.
-- **Publicar no GitHub somente a partir de uma rodada com `data/exemplo`.**
 
 ## 🛠️ Stack
 
