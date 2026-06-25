@@ -1,41 +1,43 @@
 """
 parameters.py
 
-Dicionários de mapeamento para o motor de rating "Reports Corretora".
+Parâmetros do motor "Reports Corretora". O mapa NOME ABREVIADO DO PRODUTO ->
+TIPO DE VIGÊNCIA é a **fonte de verdade** das regras por produto e mora num CSV
+editável pelo negócio em `configs/product_types.csv` (antes era um dict inline;
+a origem documental era um export de planilha em `Página1.html`).
 """
 
-# Mapeamento do "NOME ABREVIADO DO PRODUTO" para "TIPO DE VIGÊNCIA"
-PRODUCT_TYPE_MAP = {
-    "AP INDIVIDUAL": "RECORRENTE",
-    "PECULIO + AP": "RECORRENTE",
-    "AP/DIT": "RECORRENTE",
-    "AP IND SERIT/DIT": "RECORRENTE",
-    "AUTOMÓVEL": "RENOVÁVEL",
-    "EMPRESARIAL": "RENOVÁVEL",
-    "RESIDENCIAL": "RENOVÁVEL",
-    "CONSORCIO": "RECORRENTE",
-    "ODONTO": "RECORRENTE",
-    "EQUIPAMENTOS": "RENOVÁVEL",
-    "PGBL INDIVIDUAL": "RECORRENTE",
-    "RENDA POR INVALIDEZ": "RECORRENTE",
-    "RENDA MENSAL TEMP": "RECORRENTE",
-    "PENSAO TEMP. AOS DEP": "RECORRENTE",
-    "INVALIDEZ PERMANENTE": "RECORRENTE",
-    "PREVIDÊNCIA": "RECORRENTE",
-    "VGBL INDIVIDUAL": "RECORRENTE",
-    "RC PROFISSIONAL": "RENOVÁVEL",
-    "VIAGEM": "TRANSACIONAL",
-    "VIDA EM GRUPO": "RECORRENTE",
-    "VIDA INDIVIDUAL": "RECORRENTE",
-    "SERIT MAIS": "RECORRENTE",
-    "SERIT/VG": "RECORRENTE",
-    "INDIVIDUAL SERIT/DIT": "RECORRENTE",
-    "SERIT/AP": "RECORRENTE",
-    "DOENÇAS GRAVES": "RECORRENTE",
-    "PREV + RISCO": "RECORRENTE",
-    "HORIZONTE": "RECORRENTE",
-    "RISCO DE PREVIDENCIA": "RECORRENTE",
-}
+import csv
+from pathlib import Path
+
+# configs/ na raiz do projeto (src/parameters.py -> src -> raiz -> configs)
+_CONFIG_DIR = Path(__file__).resolve().parent.parent / "configs"
+_PRODUCT_TYPES_FILE = _CONFIG_DIR / "product_types.csv"
+
+
+def _load_product_type_map(path: Path = _PRODUCT_TYPES_FILE) -> dict:
+    """
+    Carrega o mapa produto -> tipo de vigência (RENOVÁVEL/RECORRENTE/TRANSACIONAL)
+    do CSV de configuração. Colunas: `produto`, `tipo_vigencia`. Caminho derivado de
+    `__file__` (reprodutível, independente do diretório de execução).
+    """
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Arquivo de configuração de produtos não encontrado: {path}. "
+            "Ele é a fonte de verdade do PRODUCT_TYPE_MAP (produto -> tipo de vigência)."
+        )
+    mapping = {}
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            produto = (row.get("produto") or "").strip()
+            tipo = (row.get("tipo_vigencia") or "").strip()
+            if produto:
+                mapping[produto] = tipo
+    return mapping
+
+
+# Mapeamento do "NOME ABREVIADO DO PRODUTO" para "TIPO DE VIGÊNCIA" (do CSV de config)
+PRODUCT_TYPE_MAP = _load_product_type_map()
 
 # Sufixos de anos a serem removidos na extração da raiz da apólice
 YEAR_SUFFIXES = [str(y) for y in range(2000, 2030)]

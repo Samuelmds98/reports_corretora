@@ -74,7 +74,8 @@ Três campos da produção governam quase tudo:
 (mensal/faturas, ex. SAÚDE/ODONTO/VIDA) ou **TRANSACIONAL** (pontual, ex. VIAGEM).
 
 **Como é calculado:** lookup do `NOME ABREVIADO DO PRODUTO` no mapa `PRODUCT_TYPE_MAP`
-(fonte de verdade em `parameters.py`, originada do Google Sheets `Página1.html`).
+(fonte de verdade em `configs/product_types.csv`, carregado por `parameters.py`;
+origem documental: Google Sheets `Página1.html`).
 
 **Impactos de dados ruins:**
 - **Produto não mapeado** (nome novo/divergente) → tipo `INDEFINIDO` → **não conta**

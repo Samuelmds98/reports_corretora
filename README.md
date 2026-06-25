@@ -78,8 +78,10 @@ navegável. Para **regenerar** a base de exemplo (reprodutível por seed):
 data/exemplo/     2 Excel fictícios (versionados) — mesma estrutura dos brutos
 data/raw/         2 Excel REAIS (NÃO versionados — gitignored)
 src/              Lógica reutilizável (funções puras DataFrame -> DataFrame)
+configs/          Configuração editável pelo negócio (ex.: product_types.csv = mapa produto→vigência)
 Main.py           Pipeline principal (lê -> saneia -> motor -> builders -> exporta)
 scripts/          Gerador de exemplo + build do warehouse DuckDB
+tests/            Testes pytest do motor de regras
 app/              App Streamlit (Home + pages/ + lib/) — lê os Parquet, reusa os _chart_*
 outputs/          Saídas por público: {comercial,operacional,marketing}/ + index.html
 docs/             Guias (auditoria, métricas, regras, evolução) + apresentação

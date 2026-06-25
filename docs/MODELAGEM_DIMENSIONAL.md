@@ -18,9 +18,9 @@ cancelamento) — o mesmo grão da base bruta `RptAnaliseProducao` (com âncora 
                           │   trim., safra)   │
                           └────────┬─────────┘
    ┌──────────────────┐            │            ┌──────────────────┐
-   │  DIM_COOPERADO    │           │            │  DIM_SEGURADORA   │
-   │ CPF, nome, sexo,  │           │            │ abreviado, nome   │
-   │ idade/faixa,      │     ┌─────┴──────┐     └────────┬─────────┘
+   │  DIM_PESSOA       │           │            │  DIM_SEGURADORA   │
+   │ CPF/CNPJ, nome,   │           │            │ abreviado, nome   │
+   │ sexo, idade/faixa,│     ┌─────┴──────┐     └────────┬─────────┘
    │ especialidade,    │─────│ FATO_      │──────────────┘
    │ cidade/estado,    │     │ PRODUCAO   │
    │ estado civil,     │     │            │──────────────┐
@@ -50,21 +50,25 @@ cancelamento) — o mesmo grão da base bruta `RptAnaliseProducao` (com âncora 
 ### 1.3 Dimensões conformadas
 | Dimensão | Chave de negócio | Atributos principais | Origem |
 |---|---|---|---|
-| **DIM_COOPERADO** | `CPF_LIMPO` | nome, SEXO, IDADE/FAIXA_ETARIA, **CARACTERÍSTICA** (especialidade), CIDADE/ESTADO, ESTADO CIVIL, **TIPO** (PF/PJ), CLIENTE DESDE, flags de contato, `STATUS_GLOBAL`, `RATING_ESTRELAS` | `RptClienteLista` + insights |
+| **DIM_PESSOA** | `CPF_LIMPO` (CPF ou CNPJ) | nome, SEXO, IDADE/FAIXA_ETARIA, **CARACTERÍSTICA** (especialidade), CIDADE/ESTADO, ESTADO CIVIL, **TIPO** (PF/PJ), CLIENTE DESDE, flags de contato, `STATUS_GLOBAL`, `RATING_ESTRELAS` | `RptClienteLista` + insights |
 | **DIM_PRODUTO** | `NOME ABREVIADO DO PRODUTO` | RAMO, **TIPO_VIGENCIA** (RENOVÁVEL/RECORRENTE/TRANSACIONAL via `PRODUCT_TYPE_MAP`) | produção + `parameters.py` |
 | **DIM_SEGURADORA** | `SEGURADORA (ABREVIADO)` | nome completo | produção |
 | **DIM_TEMPO** | `data` | ano, mês, trimestre, safra (AAAA-MM) | derivada de `INÍCIO/TÉRMINO DE VIGÊNCIA` |
 | **DIM_PRODUTOR** | `PRODUTOR` (normalizado) | — | produção (`normalize_producer`) |
 
-> **DIM_COOPERADO é a dimensão central** (a especialidade médica é o atributo mais rico e
-> 100% confiável). `RATING_ESTRELAS`/`STATUS_GLOBAL` são atributos derivados pelo motor.
+> **DIM_PESSOA é a dimensão central.** Representa **qualquer pessoa (física ou jurídica),
+> cliente ou não-cliente** — a corretora atende **público geral** e o cadastro inclui
+> não-clientes; por isso "pessoa" (não "cliente", que excluiria os prospects, nem
+> "cooperado", específico do recorte atual). No recorte de **cooperados médicos**, a
+> `CARACTERÍSTICA` (especialidade) é o atributo mais rico e 100% confiável.
+> `RATING_ESTRELAS`/`STATUS_GLOBAL` são atributos derivados pelo motor.
 
 ## 2. Fatos secundários (snapshots periódicos)
 
-- **FATO_STATUS_PRODUTO** — grão *cooperado × seguradora × produto* (snapshot
+- **FATO_STATUS_PRODUTO** — grão *pessoa × seguradora × produto* (snapshot
   *accumulating*): status ATIVO/INATIVO/CANCELADO, valores do último ciclo. Materializa-se
   hoje como `producao_status` / `producao_enriquecida`.
-- **FATO_SNAPSHOT_MENSAL** — grão *cooperado × produto × mês* (snapshot *periodic*): clientes
+- **FATO_SNAPSHOT_MENSAL** — grão *pessoa × produto × mês* (snapshot *periodic*): pessoas
   e prêmio ativos por mês. Materializa-se como `snapshot_mensal` (a partir do grão de ciclo).
 
 ## 3. Mapeamento: star schema → marts atuais (gold)
@@ -74,7 +78,7 @@ cancelamento) — o mesmo grão da base bruta `RptAnaliseProducao` (com âncora 
 | FATO_PRODUCAO | `comercial/parquet/producao_grain` + `producao_enriquecida` |
 | FATO_STATUS_PRODUTO | `producao_status` |
 | FATO_SNAPSHOT_MENSAL | `snapshot_mensal` / `snapshot_grain` |
-| DIM_COOPERADO | `clientes_crm` + `marketing/base_cooperados` |
+| DIM_PESSOA | `clientes_crm` + `marketing/base_cooperados` |
 | DIM_PRODUTO | derivável de `producao_status` + `PRODUCT_TYPE_MAP` |
 | DIM_SEGURADORA | derivável de `market_share` / produção |
 | DIM_PRODUTOR | `performance_produtor` |
